@@ -2,8 +2,14 @@ name: fake-news-detection
 channels:
   - conda-forge
 dependencies:
-  - python=3.12
-  - pandas
   - scikit-learn
+  - python=3.12
   - jupyter
   - conda-lock
+  - pandas
+  - altair
+  - vegafusion[version='>=2.0.3']
+  - vl-convert-python[version='>=1.8.0']
+  - vegafusion-python-embed
+  - pyarrow
+prefix: C:\Users\sarah\miniforge3\envs\fake-news-detection
