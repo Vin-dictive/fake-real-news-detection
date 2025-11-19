@@ -1,7 +1,4 @@
 # Data files
-data/raw/
-data/processed/
-# *.csv
 *.json
 *.pkl
 
