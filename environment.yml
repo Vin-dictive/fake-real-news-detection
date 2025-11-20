@@ -12,4 +12,3 @@ dependencies:
   - vl-convert-python[version='>=1.8.0']
   - vegafusion-python-embed
   - pyarrow
-prefix: C:\Users\sarah\miniforge3\envs\fake-news-detection
