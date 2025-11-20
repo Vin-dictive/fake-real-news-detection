@@ -13,4 +13,4 @@ dependencies:
   - vegafusion-python-embed=1.6.9
   - pyarrow=22.0.0
   - matplotlib=3.10.8
-  - wordcloud =1.9.4
+  - wordcloud=1.9.4
