@@ -25,7 +25,7 @@ cd fake-real-news-detection
 
 ### Environment Setup
 
-#### Option 1: Using conda-lock (Recommended)
+#### Option 1: If you have conda-lock installed, use conda-lock (Recommended)
 
 1. Install from lock file for your platform:
 
@@ -64,7 +64,7 @@ This project uses a news classification dataset containing:
 
 ### Dataset Details
 
-- **Source**: [https://www.kaggle.com/datasets/clmentbisaillon/fake-and-real-news-dataset]
+- **Source**: <https://www.kaggle.com/datasets/clmentbisaillon/fake-and-real-news-dataset>
 - **Size**: 116.37 MB
 
 *Note: Please refer to the original dataset documentation for detailed information about data collection methodology and licensing terms.*
@@ -85,19 +85,19 @@ fake-real-news-detection/
 ### Jessie Liang
 
 - **Affiliation**: University of British Columbia
-- **Email**: [email@example.com]
+- **Email**: <rnliang.jessie@gmail.com>
 - **GitHub**: [@jessie-liang](https://github.com/jessie-liang)
 
 ### Sarah Gauthier
 
 - **Affiliation**: University of British Columbia
-- **Email**: [sgauth01@student.ubc.ca]
+- **Email**: <sgauth01@student.ubc.ca>
 - **GitHub**: [@sgauth01](https://github.com/sgauth01)
 
 ### Vinay Valson
 
 - **Affiliation**: University of British Columbia
-- **Email**: [vinay.valson@gmail.com]
+- **Email**: <vinay.valson@gmail.com>
 - **GitHub**: [@Vin-dictive](https://github.com/Vin-dictive)
 
 ## Contributing
