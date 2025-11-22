@@ -23,6 +23,26 @@ cd fake-real-news-detection
 
 **Note:** The initial clone may take some time as the repository contains dataset files (CSV files in the `data/` directory).
 
+## Packages and Dependencies
+
+### Core Dependencies
+
+- **Python 3.13** - Programming language
+- **NumPy** - Numerical computing library
+- **Pandas** - Data manipulation and analysis
+- **Scikit-learn** - Machine learning library
+- **SciPy** - Scientific computing library
+
+#### Visualization & Analysis
+
+- **Matplotlib** - Plotting library
+- **Altair** - Statistical visualization library
+- **WordCloud** - Word cloud generation
+
+#### Development Environment
+
+- **Jupyter** - Interactive notebook environment
+
 ### Environment Setup
 
 #### Option 1: If you have conda-lock installed, use conda-lock (Recommended)
