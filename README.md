@@ -76,8 +76,19 @@ fake-real-news-detection/
 ├── data/
 │   ├── Fake.csv              # Fake news articles dataset
 │   └── True.csv              # Real news articles dataset
+├── img/
+│   ├── readme_1.png              
+│   └── readme_2.png
+│   ├── readme_3.png              
+│   └── readme_4.png
 ├── notebooks/
 │   └── analysis.ipynb        # Main analysis and modeling notebook
+├── CODE_OF_CONDUCT.md
+├── conda-lock.yml
+├── CONTRIBUTING.md
+├── environment.yml
+├── LICENSE
+├── README.md
 ```
 
 ## Contributors
