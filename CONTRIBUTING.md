@@ -13,7 +13,8 @@ Before opening a new pull request, you are supposed to write an issue first and 
 ## Code style
 
 * Your suggested code is supposed to follow [PEP 8](https://pep8.org/) Python style guide.
-  You could choose [black](https://black.readthedocs.io/) for automatic code formatting and [flake8](https://flake8.pycqa.org/) for linting.
+
+* You could choose [black](https://black.readthedocs.io/) for automatic code formatting and [flake8](https://flake8.pycqa.org/) for linting.
 
 * Using straightforward variable names and keeping functions focused on one single task are appreciated.
 
@@ -36,15 +37,15 @@ Before opening a new pull request, you are supposed to write an issue first and 
 
 ### Instructions for Adding New Dependencies
 
-1. Open the terminal locally, and set the working directory to the root directory. Install conda and conda-lock in the base environment if you haven't already done so.
+1. Set the working directory to the root directory in your terminal. Install conda and conda-lock in the base environment if you haven't already done so.
 
-2. Create a conda environment called "fake-news-detection" using the "conda-lock.yml" by executing the following code in terminal:
+2. Create "fake-news-detection", a conda environment, using the "conda-lock.yml" file. Specifically, execute the following code in terminal:
 
    ```bash
    conda-lock install --name fake-news-detection conda-lock.yml
    ```
 
-3. Activate this newly installed conda environment:
+3. Activate this newly installed conda environment "fake-news-detection":
 
    ```bash
    conda activate fake-news-detection
@@ -56,15 +57,15 @@ Before opening a new pull request, you are supposed to write an issue first and 
    conda install {NEW-PACKAGE-NAME}
    ```
 
-   If the package you intend to install is only available on PyPI, please use pip to install and then note it down for requirements.txt updates.
+   If the package you intend to install is only available on PyPI, please use pip to install it and then note it down for requirements.txt updates.
 
-5. Return to the root directory, and then update environment.yml using:
+5. Return to the root directory, and then create the lastest version of environment.yml by typing:
 
    ```bash
    conda env export --from-history > environment.yml
    ```
 
-6. Utilize conda-lock to solve and lock the updated environment that should be adaptable across different systems and platforms:
+6. Utilize conda-lock on the updated environment that should be adaptable across different systems and platforms:
 
    ```bash
    conda-lock lock --file environment.yml
