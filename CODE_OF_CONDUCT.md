@@ -28,4 +28,9 @@ Project maintainers are responsible for clarifying the standards of acceptable b
 
 ## Attribution
 
-This Code of Conduct is adapted from the Contributor Covenant, version 1.4.
+This Code of Conduct is adapted from the [Contributor Covenant][homepage],
+version 2.0, available at
+<https://www.contributor-covenant.org/version/2/0/code_of_conduct.html>.
+
+Community Impact Guidelines were inspired by [Mozilla's code of conduct
+enforcement ladder](https://github.com/mozilla/diversity).
