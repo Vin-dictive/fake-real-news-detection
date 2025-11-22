@@ -69,6 +69,26 @@ This project uses a news classification dataset containing:
 
 *Note: Please refer to the original dataset documentation for detailed information about data collection methodology and licensing terms.*
 
+## Packages and Dependencies
+
+### Core Dependencies
+
+- **Python 3.13** - Programming language
+- **NumPy** - Numerical computing library
+- **Pandas** - Data manipulation and analysis
+- **Scikit-learn** - Machine learning library
+- **SciPy** - Scientific computing library
+
+#### Visualization & Analysis
+
+- **Matplotlib** - Plotting library
+- **Altair** - Statistical visualization library
+- **WordCloud** - Word cloud generation
+
+#### Development Environment
+
+- **Jupyter** - Interactive notebook environment
+
 ## Repository Structure
 
 ```
