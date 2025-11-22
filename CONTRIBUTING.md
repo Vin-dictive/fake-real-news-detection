@@ -1,28 +1,28 @@
 # Contributing to Fake Real News Detection
 
-This outlines how to propose a change to the project.
+The following outlines the steps to propose a change and contribute to the project.
 
 ## Prerequisites
 
-Before you make a substantial pull request, you should always file an issue and make sure someone from the team agrees that it's a problem. If you've found a bug, create an associated issue and illustrate the bug with a minimal reproducible example.
+Before opening a new pull request, you are supposed to write an issue first and wait for someone from the team to approve your ideas. If a bug is found, please reach out to us by an associated issue where you demonstrate how the bug happens using a minimal reproducible example.
 
 ## Pull request process
 
-* We are accepting PR's only from project members at the moment.
+* Only PR's created by project members are accepted at the moment.
 
 ## Code style
 
-* New code should follow [PEP 8](https://pep8.org/) Python style guide.
-  You can use [black](https://black.readthedocs.io/) for automatic code formatting and [flake8](https://flake8.pycqa.org/) for linting.
+* Your suggested code is supposed to follow [PEP 8](https://pep8.org/) Python style guide.
+  You could choose [black](https://black.readthedocs.io/) for automatic code formatting and [flake8](https://flake8.pycqa.org/) for linting.
 
-* Use meaningful variable names and keep functions focused on a single task.
+* Using straightforward variable names and keeping functions focused on one single task are appreciated.
 
-* Add docstrings to all functions and classes using [Google style](https://google.github.io/styleguide/pyguide.html#38-comments-and-docstrings).
+* Docstrings need to be documented under all functions and classes definitions using [Google style](https://google.github.io/styleguide/pyguide.html#38-comments-and-docstrings).
 
 * For Jupyter notebooks:
-  * Use clear markdown cells to explain analysis steps
-  * Keep code cells concise and well-commented
-  * Include visualizations with proper titles and labels
+  * Please make use of markdown cells to literate ideas and your coding script
+  * Code cells should be concise and well-commented
+  * Visualizations should come with proper titles and labels
 
 <!-- * We use [pytest](https://pytest.org/) for unit tests.
   Contributions with test cases included are easier to accept. -->
@@ -36,35 +36,35 @@ Before you make a substantial pull request, you should always file an issue and 
 
 ### Instructions for Adding New Dependencies
 
-1. Open your terminal locally, direct to the root directory. Make sure you have conda and conda-lock installed on your local computer.
+1. Open the terminal locally, and set the working directory to the root directory. Install conda and conda-lock in the base environment if you haven't already done so.
 
-2. Create a conda environment called "fake-news-detection" using the "conda-lock.yml" by running in your terminal:
+2. Create a conda environment called "fake-news-detection" using the "conda-lock.yml" by executing the following code in terminal:
 
    ```bash
    conda-lock install --name fake-news-detection conda-lock.yml
    ```
 
-3. Activate the conda environment:
+3. Activate this newly installed conda environment:
 
    ```bash
    conda activate fake-news-detection
    ```
 
-4. Use conda to install new packages:
+4. Install new packages using conda if needed:
 
    ```bash
    conda install {NEW-PACKAGE-NAME}
    ```
 
-   If installing a package only available on PyPI, use pip and note it for requirements.txt updates.
+   If the package you intend to install is only available on PyPI, please use pip to install and then note it down for requirements.txt updates.
 
-5. At root directory, update environment.yml using:
+5. Return to the root directory, and then update environment.yml using:
 
    ```bash
    conda env export --from-history > environment.yml
    ```
 
-6. Use conda-lock to solve and lock the updated environment for multiple platforms:
+6. Utilize conda-lock to solve and lock the updated environment that should be adaptable across different systems and platforms:
 
    ```bash
    conda-lock lock --file environment.yml
@@ -76,5 +76,7 @@ Before you make a substantial pull request, you should always file an issue and 
 Please note that the project is released with a [Contributor Code of Conduct](CODE_OF_CONDUCT.md). By contributing to this project you agree to abide by its terms.
 
 ---
+
+## Citation:
 
 *This contributing guide is adapted from the [AI bias in farming project](https://github.com/skysheng7/AI_bias_in_farming/blob/main/CONTRIBUTING.md).*
