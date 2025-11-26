@@ -69,7 +69,7 @@ Before opening a new pull request, you are supposed to write an issue first and 
 
    ```bash
    conda-lock lock --file environment.yml
-   conda-lock -f environment.yml -p osx-64 -p linux-64 -p win-64
+   conda-lock -k explicit --file environment.yml -p osx-64 -p linux-64 -p win-64
    ```
 
 ## Code of Conduct
@@ -78,6 +78,6 @@ Please note that the project is released with a [Contributor Code of Conduct](CO
 
 ---
 
-## Citation:
+## Citation
 
 *This contributing guide is adapted from the [AI bias in farming project](https://github.com/skysheng7/AI_bias_in_farming/blob/main/CONTRIBUTING.md).*

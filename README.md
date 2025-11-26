@@ -50,7 +50,7 @@ cd fake-real-news-detection
 1. Install from lock file for your platform:
 
    ```bash
-   conda-lock install --name fake-news-detection conda-lock.yml
+   conda-lock install --name fake-news-detection <your os>.lock
    conda activate fake-news-detection
    ```
 
@@ -62,6 +62,16 @@ cd fake-real-news-detection
    conda env create -f environment.yml
    conda activate fake-news-detection
    ```
+
+#### Option 3: Using Docker
+
+1. Build and run with Docker Compose:
+
+   ```bash
+   docker-compose up --build
+   ```
+
+2. Access Jupyter Lab at <http://localhost:8000>
 
 ## Usage
 

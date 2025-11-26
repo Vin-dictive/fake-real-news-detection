@@ -2,19 +2,15 @@ name: fake-news-detection
 channels:
   - conda-forge
 dependencies:
-  - python=3.13
+  - python=3.11
   - numpy
   - pandas
   - scikit-learn
-  - jupyter
   - conda-lock
   - scipy
+  - wordcloud
+  - matplotlib
   - altair
   - vegafusion
   - vl-convert-python
   - pyarrow
-  - pip
-  - pip:
-    - wordcloud
-    - matplotlib
-    
