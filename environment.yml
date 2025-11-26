@@ -10,7 +10,7 @@ dependencies:
   - scipy
   - wordcloud
   - matplotlib
-  - altair
-  - vegafusion
-  - vl-convert-python
-  - pyarrow
+  # - altair
+  # - vegafusion
+  # - vl-convert-python
+  # - pyarrow
