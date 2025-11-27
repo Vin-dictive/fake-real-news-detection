@@ -68,10 +68,16 @@ cd fake-real-news-detection
 1. Build and run with Docker Compose:
 
    ```bash
-   docker-compose up --build
+   docker compose up --build
    ```
 
-2. Access Jupyter Lab at <http://localhost:8000>
+2. Or build and run directly:
+
+   ```bash
+   docker build -t fake-news-detection . && docker run -p 8000:8000 fake-news-detection
+   ```
+
+3. Access Jupyter Lab at <http://localhost:8000>
 
 ## Usage
 
