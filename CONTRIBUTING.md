@@ -69,7 +69,7 @@ Before opening a new pull request, you are supposed to write an issue first and 
 
    ```bash
    conda-lock lock --file environment.yml
-   conda-lock -k explicit --file environment.yml -p osx-64 -p linux-64 -p win-64 -p osx-arm64
+   conda-lock -k explicit --file environment.yml -p osx-64 -p linux-64 -p win-64 -p osx-arm64 -p linux-aarch64
    ```
 
 ## Code of Conduct
