@@ -2,8 +2,8 @@ services:
   fake-real-news-detection:
     image: vindictive/fake-real-news-detection:latest
     container_name: fake-real-news-detection
-    platform: linux/amd64 # Uncomment for amd64/Windows
-    # platform: linux/arm64 # Uncomment for ARM/MacOS
+    # platform: linux/amd64 # Uncomment for amd64/Windows
+    platform: linux/arm64 # Uncomment for ARM/MacOS
     ports:
       - "8000:8000"
     environment:
