@@ -65,7 +65,7 @@ cd fake-real-news-detection
 
 #### Option 3: Using Docker
 
-1. Build and run with Docker Compose:
+1. Build and run with Docker Compose for running image from docker hub:
 
    ```bash
    docker compose up --build
