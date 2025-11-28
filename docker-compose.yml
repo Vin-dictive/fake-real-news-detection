@@ -1,5 +1,3 @@
-version: '3.8'
-
 services:
   fake-real-news-detection:
     image: vindictive/fake-real-news-detection:latest
