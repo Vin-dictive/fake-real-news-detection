@@ -3,9 +3,8 @@ name: Publish Docker image
 on: 
   workflow_dispatch:
   push: 
-    paths: 
-      - 'Dockerfile'
-      - 'conda-linux-64.lock'
+    branches:
+      - main
       
 jobs:
   push_to_registry:
