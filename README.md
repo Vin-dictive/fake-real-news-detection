@@ -71,6 +71,8 @@ cd fake-real-news-detection
    docker compose up --build
    ```
 
+   For ARM based chips run with platform as linux/arm64 in docker-compose.yml
+
 2. Or build and run directly:
 
    ```bash
