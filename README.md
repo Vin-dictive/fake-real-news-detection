@@ -158,4 +158,6 @@ Please read our [Code of Conduct](CODE_OF_CONDUCT.md) before contributing.
 
 ## License
 
-This project is licensed under the terms specified in the [LICENSE](LICENSE) file.
+## License
+- **Code**: This project’s source code is licensed under the MIT License. See the [LICENSE](LICENSE) file for details.  
+- **Documentation**: The documentation, reports, and written materials in this repository are licensed under the [Creative Commons Attribution 4.0 International (CC BY 4.0)](https://creativecommons.org/licenses/by/4.0/) license.
