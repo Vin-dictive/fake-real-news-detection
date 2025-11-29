@@ -80,7 +80,7 @@ cd fake-real-news-detection
    docker run --rm -p 8000:8000 fake-news-detection
    ```
 
-3. Access Jupyter Lab at <http://localhost:8000>
+3. Access Jupyter Lab at <http://127.0.0.1:8000/lab>
 
 ## Usage
 
