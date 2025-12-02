@@ -8,14 +8,14 @@ The project report (contained in the [`notebooks` folder](https://github.com/Vin
 
 This is a plain-language overiview of the the [license](https://creativecommons.org/licenses/by-nc-sa/4.0/legalcode).
 
-## What you are allowed to do:
+### What you are allowed to do:
 
 - **Share** — You may copy and redistribute the material in any format or medium
 - **Adapt** — You may remix, transform, and build upon the material
 
 These freedoms are guaranteed as long as you comply with the license conditions.
 
-## Under the following terms:
+### Under the following terms:
 
 - **Attribution** — You must give proper credit, noting that your work is based on material Copyright © Sarah Gauthier, Jessie Liang and Vinay Valson. Where possible, provide a link to the license, and indicate if changes were made. Attribution should be reasonable and must not imply endorsement.
 - **NonCommercial** — The material may not be used for commercial purposes.
@@ -23,7 +23,7 @@ These freedoms are guaranteed as long as you comply with the license conditions.
 
 **No additional restrictions** — You may not apply legal or technical measures that prevent others from exercising the rights granted by this license.
 
-## Notices:
+### Notices:
 
 You do not need to follow the license terms for material that is in the public domain or where your use is otherwise permitted by law.
 The license is provided without warranties. It may not cover all permissions you need for your intended use; other rights such as privacy, publicity, or moral rights may still apply.
