@@ -112,22 +112,32 @@ This project uses a news classification dataset containing:
 
 ```
 fake-real-news-detection/
+├── .github/
+│   └── workflows/
+│       └── docker-publish.yml    # GitHub Actions workflow
 ├── data/
-│   ├── Fake.csv              # Fake news articles dataset
-│   └── True.csv              # Real news articles dataset
+│   └── raw/
+│       ├── Fake.csv              # Fake news articles dataset
+│       └── True.csv              # Real news articles dataset
 ├── img/
 │   ├── readme_1.png              
-│   └── readme_2.png
+│   ├── readme_2.png
 │   ├── readme_3.png              
 │   └── readme_4.png
 ├── notebooks/
-│   └── analysis.ipynb        # Main analysis and modeling notebook
+│   └── 001_fake_news_classification_analysis.ipynb  # Main analysis and modeling notebook
+├── reports/                      # Generated reports and outputs
+├── scripts/
+│   └── 00_download_data.py       # Data download script
+├── .gitignore
 ├── CODE_OF_CONDUCT.md
 ├── conda-lock.yml
 ├── CONTRIBUTING.md
+├── docker-compose.yml
+├── Dockerfile
 ├── environment.yml
 ├── LICENSE
-├── README.md
+└── README.md
 ```
 
 ## Contributors
@@ -157,4 +167,5 @@ We welcome contributions to this project! Please see our [Contributing Guideline
 Please read our [Code of Conduct](CODE_OF_CONDUCT.md) before contributing.
 
 ## License
+
 This project’s source code is licensed under the MIT License.  The documentation, reports, and written materials in this repository are licensed under the [Creative Commons Attribution 4.0 International (CC BY 4.0)](https://creativecommons.org/licenses/by/4.0/) license. See the [LICENSE](LICENSE) file for details.
