@@ -23,22 +23,6 @@ cd fake-real-news-detection
 
 **Note:** The initial clone may take some time as the repository contains dataset files (CSV files in the `data/` directory).
 
-## Packages and Dependencies
-
-### Core Dependencies
-
-- **Python 3.13** - Programming language
-- **NumPy** - Numerical computing library
-- **Pandas** - Data manipulation and analysis
-- **Scikit-learn** - Machine learning library
-- **SciPy** - Scientific computing library
-
-#### Visualization & Analysis
-
-- **Matplotlib** - Plotting library
-- **Altair** - Statistical visualization library
-- **WordCloud** - Word cloud generation
-
 #### Development Environment
 
 - **Jupyter** - Interactive notebook environment
@@ -82,17 +66,40 @@ cd fake-real-news-detection
 
 3. Access Jupyter Lab at <http://127.0.0.1:8000/lab>
 
-## Usage
+### Running the analysis
 
-1. After setting up the environment, launch Jupyter notebook:
+1. Navigate to the root of this project on your computer using the
+   command line and enter the following command:
 
    ```bash
-   jupyter notebook
+   docker compose up --build
    ```
 
-2. Navigate to `notebooks/analysis.ipynb`
-3. The analysis notebook can be run from scratch using the restart button in Jupyter
-4. All cells can be executed sequentially for complete analysis
+2. In the terminal, look for a URL that starts with
+`http://127.0.0.1:8888/lab?token=`
+Copy and paste that URL into your browser.
+
+3. To run the analysis,
+open a terminal and run the following commands:
+
+   ```bash
+   python scripts/00_download_data.py \
+      --url="https://raw.githubusercontent.com/Vin-dictive/fake-real-news-detection/refs/heads/main/data/raw/Fake.csv" \
+      --write_to=data/raw
+   
+   python scripts/00_download_data.py \
+      --url="https://raw.githubusercontent.com/Vin-dictive/fake-real-news-detection/refs/heads/main/data/raw/True.csv" \
+      --write_to=data/raw
+
+   quarto render reports/fake_news_classification_analysis.qmd --to pdf
+   quarto render reports/fake_news_classification_analysis.qmd --to html
+   ```
+
+### Clean up
+
+1. To shut down the container and clean up the resources,
+type `Ctrl` + `C` in the terminal
+where you launched the container, and then type `docker compose rm`
 
 ## Dataset Information
 

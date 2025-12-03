@@ -45,3 +45,16 @@ jobs:
           push: true
           tags: ${{ steps.meta.outputs.tags }}
           labels: ${{ steps.meta.outputs.labels }}
+      
+      - name: Update docker-compose.yml with new tag
+        run: |
+          sed -i "s|# image: vindictive/fake-real-news-detection:.*|image: vindictive/fake-real-news-detection:${GITHUB_SHA:0:7}|" docker-compose.yml
+          sed -i "s|build: .|# build: .|" docker-compose.yml
+      
+      - name: Commit updated docker-compose.yml
+        run: |
+          git config --local user.email "action@github.com"
+          git config --local user.name "GitHub Action"
+          git add docker-compose.yml
+          git diff --staged --quiet || git commit -m "Update docker-compose.yml with tag ${GITHUB_SHA:0:7}"
+          git push
