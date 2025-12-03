@@ -1,6 +1,6 @@
 services:
   fake-real-news-detection:
-    # image: vindictive/fake-real-news-detection:2939e1a
+    image: vindictive/fake-real-news-detection:2939e1a
     build: .
     container_name: fake-real-news-detection
     # platform: linux/amd64 # Uncomment for amd64/Windows
