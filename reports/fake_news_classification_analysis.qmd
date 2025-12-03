@@ -8,12 +8,28 @@ format:
     toc-depth: 3
     code-fold: false
     embed-resources: true
+    number-sections: true
+    fig-cap-location: bottom
+    tbl-cap-location: top
+  pdf:
+    toc: true
+    toc-depth: 3
+    number-sections: true
+    fig-cap-location: bottom
+    tbl-cap-location: top
+bibliography: references.bib
+cite-method: biblatex
 jupyter: python3
+execute:
+  echo: false
+  warning: false
+  message: false
 ---
 
 **Note**: The model fitting code runs up to 5 minutes.
 
 ```{python}
+#| echo: false
 import numpy as np
 import pandas as pd
 from sklearn.dummy import DummyClassifier
@@ -37,25 +53,26 @@ from sklearn.metrics import ConfusionMatrixDisplay, PrecisionRecallDisplay, RocC
 import pandera.pandas as pa
 ```
 
-## Summary
+# Summary
 
 News is everywhere. In this digital era, there exists both true and fake news on the Internet, making it harder for readers and news agents to differentiate them. So, fake news detection is a technology with rising demands that helps defend information integrity. To solve this problem, applied machine learning is used for binary classification. The fitted Naive Bayes model with `MultinomialNB` as estimator and `title`, `text` and `subject` as features yields a test classification accuracy of 0.954, where the false positive and false negative rates are both low. The AP score and AUC value of the final model end up being 0.97 and 0.98 respectively, suggesting decent and satisfactory performance. Compared to the baseline dummy classifier, this Naive Bayes model classifies both true and fake news significantly better, which is reflected by consistently high and similar training, cross-validation and test scores. This machine learning model gives us confidence in its decent performance, which can potentially be deployed and used in the reality. But limitations do exist, since the collected data do not cover all possible types of news. So, when deployed in the wild, the model might perform badly in news of other realms, such as entertainment news. If more comprehensive data can be collected, then this model might handle more cases accurately.
 
-## Introduction
+# Introduction
 
-"Fake news", also known as disinformation, is deliberately misleading or false information presented as legitimate news (Service Canada, 2024). Its rapid spread in recent years has becoming a pressing concern, particularly with the rise of social media platforms that accelerate the dissemination of content. These platforms are designed with the primary objective of capturing and retaining user attention for as long as possible. To that end, fake news often exploits this design to gain traction.
+"Fake news", also known as disinformation, is deliberately misleading or false information presented as legitimate news [@servicecanada2024]. Its rapid spread in recent years has becoming a pressing concern, particularly with the rise of social media platforms that accelerate the dissemination of content. These platforms are designed with the primary objective of capturing and retaining user attention for as long as possible. To that end, fake news often exploits this design to gain traction.
 
-There is high public awareness of this issue in Canada. In 2023, Statistics Canada reported that 59% of Canadians admitted that they were "very or extremely concerned about online misinformation" in the Survey Series on People and their Communities (Bilodeau and Khalid, 2024). In the United States, the concept of "fake news" grew in popularity during the 2016 presidential election. Allcott and Gentzkow (2017) estimated that false news stories were shared on Facebook at least 38 million times in the 3 months leading up to the election. Such widespread circulation of this false information can have serious consequences, including influencing public opinion and undermining trust in legitimate news sources. Thus, methods for detecting fake news may be beneficial in mitigating its spread.
+There is high public awareness of this issue in Canada. In 2023, Statistics Canada reported that 59% of Canadians admitted that they were "very or extremely concerned about online misinformation" in the Survey Series on People and their Communities [@bilodeau2024]. In the United States, the concept of "fake news" grew in popularity during the 2016 presidential election. @allcott2017 estimated that false news stories were shared on Facebook at least 38 million times in the 3 months leading up to the election. Such widespread circulation of this false information can have serious consequences, including influencing public opinion and undermining trust in legitimate news sources. Thus, methods for detecting fake news may be beneficial in mitigating its spread.
 
 This report investigates whether a machine learning model can accurately classify news articles as "fake" or "true" based on their textual characteristics, such as the article's title, subject and body content. Automated detection of fake news has the potential to mitigate the spread and impact of information, particularly in social media's fast-paced environment where information is shared instantly and at scale, from numerous sources.
 
-## Data
+# Data
 
-The dataset used in this analysis is the "Fake and Real News Dataset" available on Kaggle, [here](https://www.kaggle.com/datasets/clmentbisaillon/fake-and-real-news-dataset). It contains approximately 40,000 news articles published in the United States between 2015 and 2018. Each row in the dataset represents a news article, with a column for its title, subject, date, and body text.
+The dataset used in this analysis is the "Fake and Real News Dataset" available on Kaggle [@bisaillon2020]. It contains approximately 40,000 news articles published in the United States between 2015 and 2018. Each row in the dataset represents a news article, with a column for its title, subject, date, and body text.
 
 The raw data from Kaggle was initially provided as two seperate datasets: one for the fake articles and one for the true articles. To prepare the data for modeling, we conducted some validation checks to make sure the data was in the expected format, with no missing observations or duplicate entries. The two datasets were then merged into one large one, with an additional column for the `target` value, indicating whether the article was labeled as "true" or "fake". To support model training and evaluation, we shuffled the rows and split the data into training (80%) and testing (20%) sets. Further validation was conducted on the training set to identify outliers and anomoulous correlations. Finally, we conducted exploratory data analysis (EDA) on the training data set to examine the distribution of the target variable and gain initial insights into the dataset.
 
 ```{python}
+#| echo: false
 true_url = "../data/raw/True.csv" 
 fake_url = "../data/raw/Fake.csv"
 
@@ -69,6 +86,7 @@ fake_df = pd.read_csv(fake_url)
 ```
 
 ```{python}
+#| echo: false
 true_df['target'] = 'True'
 true_df['subject'] = true_df['subject'].replace('politicsNews', 'political')
 true_df['subject'] = true_df['subject'].replace('worldnews', 'non-political')
@@ -76,6 +94,7 @@ true_df.head()
 ```
 
 ```{python}
+#| echo: false
 fake_df['target'] = 'Fake'
 fake_df['subject'] = fake_df['subject'].replace('politics', 'political')
 fake_df['subject'] = fake_df['subject'].replace('left-news', 'political')
@@ -86,7 +105,7 @@ fake_df['subject'] = fake_df['subject'].replace('Middle-east', 'non-political')
 fake_df.head()
 ```
 
-### Data Validation
+## Data Validation
 
 **Part 1**: Perform the following data validation checks:
 - Correct column names
@@ -96,6 +115,7 @@ fake_df.head()
 - No duplicate observations
 
 ```{python}
+#| echo: false
 true_df = true_df.drop_duplicates()
 
 schema = pa.DataFrameSchema(
@@ -119,6 +139,7 @@ schema.validate(true_df, lazy=True)
 ```
 
 ```{python}
+#| echo: false
 fake_df = fake_df.drop_duplicates()
 schema.validate(fake_df, lazy=True)
 ```
@@ -128,6 +149,7 @@ schema.validate(fake_df, lazy=True)
 - Correct category levels (i.e., no string mismatches or single values)
 
 ```{python}
+#| echo: false
 complete_df = pd.concat([true_df, fake_df])
 
 # Split into train/test data sets
@@ -137,6 +159,7 @@ train_df, test_df = train_test_split(
 ```
 
 ```{python}
+#| echo: false
 schema2 = pa.DataFrameSchema(
     {
         "title": pa.Column(
@@ -172,6 +195,7 @@ schema2 = pa.DataFrameSchema(
 ```
 
 ```{python}
+#| echo: false
 train_df = train_df[train_df['text'].str.len() >= 20]
 train_df = train_df[pd.to_datetime(train_df['date'], 
                                    format='mixed', 
@@ -186,6 +210,7 @@ schema2.validate(train_df, lazy=True)
 - No anomalous correlations between features/explanatory variables
 
 ```{python}
+#| echo: false
 # check target/response variable follows expected distribution:
 def expected_target_distribution(df):
     return (df['target'].value_counts(normalize=True) < 0.8).all()
@@ -233,6 +258,7 @@ def normal_corr_between_features(df):
 ```
 
 ```{python}
+#| echo: false
 schema3 = pa.DataFrameSchema(
     checks=[pa.Check(expected_target_distribution,
                      error="Target does not follow expected distribution"),
@@ -242,31 +268,35 @@ schema3 = pa.DataFrameSchema(
 ```
 
 ```{python}
+#| echo: false
 schema3.validate(train_df)
 ```
 
-### Data Preprocessing
+## Data Preprocessing
 
 ```{python}
+#| echo: false
 X_train, y_train = train_df.drop(columns=["target"]), train_df["target"]
 X_test, y_test = test_df.drop(columns=["target"]), test_df["target"]
 ```
 
-## Methods
+# Methods
 
-### EDA
+## EDA
 
 ```{python}
+#| echo: false
 train_df.info()
 ```
 
-As we can see from this summary, the training data contains 30,912 observations. Each observation represents an article with a title, text, subject, date and target label. Each of these are non-null objects.
+As we can see from this summary, the training data contains `{python} len(train_df)` observations. Each observation represents an article with a title, text, subject, date and target label. Each of these are non-null objects.
 
-### Count of Fake vs. Real News Articles
-
-Figure 1: Count of true vs. fake news articles in training data set
+## Count of Fake vs. Real News Articles
 
 ```{python}
+#| label: fig-target-distribution
+#| fig-cap: "Count of true vs. fake news articles in training data set"
+#| echo: false
 counts = train_df['target'].value_counts().sort_index()
 
 plt.figure(figsize=(6, 1.5)) 
@@ -281,12 +311,15 @@ plt.show()
 ```
 
 ```{python}
-train_df['target'].value_counts()
+#| echo: false
+fake_count = train_df['target'].value_counts()['Fake']
+true_count = train_df['target'].value_counts()['True']
 ```
 
-From figure 1, we can see that the training dataset is fairly balanced, with 13,885 fake news articles and 17,027 real news articles. This balance may help to prevent bias towards one class over the other when training our model.
+From @fig-target-distribution, we can see that the training dataset is fairly balanced, with `{python} fake_count` fake news articles and `{python} true_count` real news articles. This balance may help to prevent bias towards one class over the other when training our model.
 
 ```{python}
+#| echo: false
 fake_text = train_df[train_df['target'] == 'Fake']['text']
 true_text = train_df[train_df['target'] == 'True']['text']
 
@@ -316,11 +349,14 @@ fake_title_words = fake_titles.str.cat(sep=" ")
 true_title_words = true_titles.str.cat(sep=" ")
 ```
 
-### Word Clouds for Titles Column
-
-Figure 2: Word cloud for titles of fake news articles
+## Word Clouds for Titles Column
 
 ```{python}
+#| label: fig-fake-wordcloud
+#| fig-cap: "Word cloud for titles of fake news articles"
+#| fig-width: 7
+#| fig-height: 3.5
+#| echo: false
 # Generate word cloud for fake news titles
 fake_wordcloud = WordCloud(width=800, height=400, background_color='white').generate(fake_title_words)
 
@@ -331,9 +367,12 @@ plt.title('Word Cloud for Fake News Titles')
 plt.show()
 ```
 
-Figure 3: Word cloud for titles of true news articles
-
 ```{python}
+#| label: fig-true-wordcloud
+#| fig-cap: "Word cloud for titles of true news articles"
+#| fig-width: 7
+#| fig-height: 3.5
+#| echo: false
 # Generate word cloud for true news titles
 true_wordcloud = WordCloud(width=800, height=400, background_color='white').generate(true_title_words)
 
@@ -344,9 +383,10 @@ plt.title('Word Cloud for True News Titles')
 plt.show()
 ```
 
-### Model Building
+## Model Building
 
 ```{python}
+#| echo: false
 # Create preprocessing pipeline
 preprocessor = ColumnTransformer(
     transformers=[
@@ -367,9 +407,10 @@ nb_pipeline = Pipeline([
 nb_pipeline.fit(X_train, y_train)
 ```
 
-### Model Evaluation
+## Model Evaluation
 
 ```{python}
+#| echo: false
 # Make predictions
 y_pred = nb_pipeline.predict(X_test)
 y_pred_proba = nb_pipeline.predict_proba(X_test)
@@ -380,14 +421,16 @@ print(classification_report(y_test, y_pred))
 ```
 
 ```{python}
+#| echo: false
 # Calculate accuracy
 accuracy = nb_pipeline.score(X_test, y_test)
 print(f"Test Accuracy: {accuracy:.3f}")
 ```
 
-### Baseline Model Comparison
+## Baseline Model Comparison
 
 ```{python}
+#| echo: false
 # Create dummy classifier for baseline
 dummy_clf = DummyClassifier(strategy='most_frequent')
 dummy_clf.fit(X_train, y_train)
@@ -399,10 +442,15 @@ print(f"Naive Bayes Accuracy: {accuracy:.3f}")
 print(f"Improvement: {accuracy - dummy_accuracy:.3f}")
 ```
 
-## Results
+# Results
 
-The Naive Bayes model achieved a test accuracy of approximately 95.4%, which represents a significant improvement over the baseline dummy classifier. The model demonstrates strong performance in distinguishing between fake and real news articles based on their textual characteristics.
+The Naive Bayes model achieved a test accuracy of `{python} f"{accuracy:.1%}"`, which represents a significant improvement over the baseline dummy classifier. The model demonstrates strong performance in distinguishing between fake and real news articles based on their textual characteristics, as shown in the word clouds (@fig-fake-wordcloud and @fig-true-wordcloud) which reveal distinct vocabulary patterns between fake and real news.
 
-## Conclusion
+# Conclusion
 
 The machine learning approach using Naive Bayes classification shows promising results for fake news detection. The model's high accuracy and balanced performance across both classes suggest it could be a valuable tool in combating misinformation. However, the model's performance may be limited to the types of news articles present in the training data, and further validation on diverse news sources would be beneficial for real-world deployment.
+
+# References
+
+::: {#refs}
+:::

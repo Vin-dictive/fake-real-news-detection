@@ -91,8 +91,7 @@ open a terminal and run the following commands:
       --url="https://raw.githubusercontent.com/Vin-dictive/fake-real-news-detection/refs/heads/main/data/raw/True.csv" \
       --write_to=data/raw
 
-   quarto render reports/fake_news_classification_analysis.qmd --to pdf
-   quarto render reports/fake_news_classification_analysis.qmd --to html
+   quarto render reports/fake_news_classification_analysis.qmd
    ```
 
 ### Clean up
