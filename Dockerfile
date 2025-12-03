@@ -5,7 +5,7 @@ USER root
 
 # install LaTeX fonts for Quarto PDF rendering and libxml2 for mamba
 RUN apt update \
-    && apt install -y lmodern libxml2-dev texlive-fonts-recommended
+    && apt install -y lmodern libxml2-dev texlive-fonts-recommended texlive-latex-extra
 
 RUN fix-permissions "${CONDA_DIR}"
 RUN fix-permissions "/home/${NB_USER}"

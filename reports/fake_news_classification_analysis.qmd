@@ -9,21 +9,12 @@ format:
     code-fold: false
     embed-resources: true
     number-sections: true
-    fig-cap-location: bottom
-    tbl-cap-location: top
   pdf:
     toc: true
     toc-depth: 3
     number-sections: true
-    fig-cap-location: bottom
-    tbl-cap-location: top
 bibliography: references.bib
-cite-method: biblatex
-jupyter: python3
-execute:
-  echo: false
-  warning: false
-  message: false
+editor: source
 ---
 
 **Note**: The model fitting code runs up to 5 minutes.
@@ -451,6 +442,3 @@ The Naive Bayes model achieved a test accuracy of `{python} f"{accuracy:.1%}"`, 
 The machine learning approach using Naive Bayes classification shows promising results for fake news detection. The model's high accuracy and balanced performance across both classes suggest it could be a valuable tool in combating misinformation. However, the model's performance may be limited to the types of news articles present in the training data, and further validation on diverse news sources would be beneficial for real-world deployment.
 
 # References
-
-::: {#refs}
-:::
