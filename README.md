@@ -72,7 +72,7 @@ cd fake-real-news-detection
    command line and enter the following command:
 
    ```bash
-   docker compose up 
+   docker compose up --build
    ```
 
 2. In the terminal, look for a URL that starts with

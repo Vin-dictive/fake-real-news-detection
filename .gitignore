@@ -25,6 +25,4 @@ env/
 # IDE
 .vscode/
 .idea/
-
-*.quarto_ipynb
 *.csv
