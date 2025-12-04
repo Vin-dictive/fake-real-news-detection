@@ -1,4 +1,4 @@
-# 01-clean-transform-data.py
+# 01_clean_transform_data.py
 # author: Sarah Gauthier
 # date: 2025-12-02
 
@@ -8,20 +8,16 @@ import numpy as np
 import pandas as pd
 
 # terminal command to run script: 
-# python scripts/clean-transform-data.py \
-    # --raw-true-data=data/raw/True.csv \
-    # --raw-fake-data=data/raw/Fake.csv
+# python scripts/01_clean_transform_data.py \
+    # --raw_true_data=data/raw/True.csv \
+    # --raw_fake_data=data/raw/Fake.csv
 
-@click.command()
-@click.option('--raw-true-data', type=str, help="Path to raw true training data")
-@click.option('--raw-fake-data', type=str, help="Path to raw fake training data")
+def read_data(raw_data):
+    # Load the raw data from the .csv files
+    data_df = pd.read_csv(raw_data)
+    return data_df
 
-
-def main(raw_true_data, raw_fake_data):
-    
-    # Load the raw true and fake data from the .csv files
-    true_df = pd.read_csv(raw_true_data)
-    fake_df = pd.read_csv(raw_fake_data)
+def transform_data(true_df, fake_df):
     
     # Create new 'target' columns true_df and fake_df
     true_df['target'] = 'True'
@@ -39,15 +35,31 @@ def main(raw_true_data, raw_fake_data):
     
     # Combine true_df and fake_df into a complete dataset
     complete_df = pd.concat([true_df, fake_df])
-    
+
     # Shuffle the complete dataframe
     complete_df = complete_df.sample(frac=1).reset_index(drop=True)
     
-    # Make sure the folder exists
-    os.makedirs("data/processed", exist_ok=True)
+    return complete_df
+
+@click.command()
+@click.option('--raw_true_data', type=str, help="Path to raw true data")
+@click.option('--raw_fake_data', type=str, help="Path to raw fake data")
+def main(raw_true_data, raw_fake_data):
     
-    # Upload cleaned dataset as a .csv file to the data/processed folder
-    complete_df.to_csv('data/processed/complete-data.csv')
+    # Load the raw true and fake data from the .csv files
+    true_df = read_data(raw_true_data)
+    fake_df = read_data(raw_fake_data)
+    
+    complete_df = transform_data(true_df, fake_df)
+
+    try:
+        # Make sure the folder exists
+        os.makedirs("data/processed", exist_ok=True)
+        # Upload cleaned dataset as a .csv file to the data/processed folder
+        complete_df.to_csv('data/processed/complete_data.csv')
+        print(f"Successfully uploaded processed data to data/processed")
+    except Exception as e:
+        print(f"Error uploaded processed data: {e}")
 
 if __name__ == '__main__':
     main()
