@@ -47,7 +47,7 @@ def main(test_data_path, model_path):
             naive_bayes_model = pickle.load(f)
         print("Naive Bayes model is successfully loaded")
 
-        # confusion matrix on test set
+        # plot: confusion matrix on test set
         disp = ConfusionMatrixDisplay.from_estimator(
             naive_bayes_model,
             X_test,
@@ -67,6 +67,19 @@ def main(test_data_path, model_path):
         with open(report_path, "w") as f:
             f.write(classfication_report)
         print("Successfully save classification report as a text file")
+
+        # plot: PR curve
+        disp2 = PrecisionRecallDisplay.from_estimator(
+            naive_bayes_model,
+            X_test,
+            y_test,
+            pos_label='Fake',
+            name='MultinomialNB'
+        )
+        pr_curve_path = 'img/pr_curve.png'
+        disp2.figure_.savefig(pr_curve_path, dpi=300, bbox_inches='tight')
+        disp2.figure_.clf()
+        print("Successfully save PR curve to the /img folder")
         
 
     except FileNotFoundError as e:
