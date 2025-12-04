@@ -44,7 +44,10 @@ def main(train_data_path):
         print("Successfully saved fake_real_count.png to the img/ folder")
 
         # target value counts as text file
-        train_df['target'].value_counts()
+        value_counts = train_df['target'].value_counts()
+        with open("data/text/target_value_counts.txt", "w") as f:
+            f.write(value_counts.to_string())
+        print("Successfully saved target_value_counts.txt to the data/text folder")
 
         # processing in preparation for word clouds
         fake_text = train_df[train_df['target'] == 'Fake']['text']
