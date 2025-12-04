@@ -43,6 +43,9 @@ def main(train_data_path):
         plt.savefig(fig_path_1, dpi=300, bbox_inches="tight")
         print("Successfully saved fake_real_count.png to the img/ folder")
 
+        # target value counts as text file
+        train_df['target'].value_counts()
+
         # processing in preparation for word clouds
         fake_text = train_df[train_df['target'] == 'Fake']['text']
         true_text = train_df[train_df['target'] == 'True']['text']
