@@ -59,7 +59,7 @@ def main(raw_true_data, raw_fake_data):
         complete_df.to_csv('data/processed/complete_data.csv')
         print(f"Successfully uploaded processed data to data/processed")
     except Exception as e:
-        print(f"Error uploaded processed data: {e}")
+        print(f"Error uploading processed data: {e}")
 
 if __name__ == '__main__':
     main()
