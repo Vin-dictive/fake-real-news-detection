@@ -80,7 +80,18 @@ def main(test_data_path, model_path):
         disp2.figure_.savefig(pr_curve_path, dpi=300, bbox_inches='tight')
         disp2.figure_.clf()
         print("Successfully save PR curve to the /img folder")
-        
+
+        # plot: ROC curve
+        disp3 = RocCurveDisplay.from_estimator(
+            naive_bayes_model,
+            X_test,
+            y_test,
+            pos_label='Fake'
+        )
+        roc_curve_path = 'img/roc_curve.png'
+        disp3.figure_.savefig(roc_curve_path, dpi=300, bbox_inches='tight')
+        disp3.figure_.clf()
+        print("Successfully save ROC curve to the /img folder")
 
     except FileNotFoundError as e:
         print(f"File not found: {e.filename}")
