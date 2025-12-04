@@ -38,8 +38,8 @@ def main(data_path):
         # Make sure the folder exists
         os.makedirs("data/processed", exist_ok=True)
         # Upload split datasets as a .csv files to the data/processed folder
-        train_df.to_csv('data/processed/train_data.csv')
-        test_df.to_csv('data/processed/test_data.csv')
+        train_df.to_csv('data/processed/train_data.csv', index=False)
+        test_df.to_csv('data/processed/test_data.csv', index=False)
         print(f"Successfully uploaded training and testing data to data/processed")
     except Exception as e:
         print(f"Error uploading processed data: {e}")
