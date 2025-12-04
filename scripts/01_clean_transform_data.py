@@ -4,7 +4,6 @@
 
 import click
 import os
-import numpy as np
 import pandas as pd
 
 # terminal command to run script: 
