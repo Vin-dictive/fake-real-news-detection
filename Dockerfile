@@ -3,9 +3,20 @@ FROM quay.io/jupyter/minimal-notebook:afe30f0c9ad8
 
 USER root
 
-# install LaTeX fonts for Quarto PDF rendering and libxml2 for mamba
-RUN apt update \
-    && apt install -y lmodern libxml2-dev texlive-fonts-recommended texlive-latex-extra
+# Install full LaTeX stack for PDF rendering
+RUN apt update && apt install -y \
+    lmodern \
+    texlive \
+    texlive-latex-base \
+    texlive-latex-extra \
+    texlive-fonts-recommended \
+    texlive-fonts-extra \
+    texlive-bibtex-extra \
+    texlive-science \
+    texlive-xetex \
+    texlive-luatex \
+    texlive-lang-european \
+    latexmk
 
 RUN fix-permissions "${CONDA_DIR}"
 RUN fix-permissions "/home/${NB_USER}"
