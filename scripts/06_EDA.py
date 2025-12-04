@@ -137,6 +137,62 @@ def main(train_data_path):
         plt.savefig(fig_path_6, dpi=300, bbox_inches="tight")
         print("Successfully saved title_length_dist.png to the img/ folder")
 
+        # plot: text length distribution for fake and true news
+        filtered_df = train_df[train_df['text_length'] < 12000]
+        bins = 30
+        plt.figure(figsize=(8, 5))
+        for label in filtered_df['target'].unique():
+            subset = filtered_df[filtered_df['target'] == label]
+            plt.hist(
+                subset['text_length'],
+                bins=bins,
+                alpha=0.6,
+                label=str(label)
+            )
+        plt.xlabel('Text Length (Number of Words)')
+        plt.ylabel('Number of Articles')
+        plt.title('Distribution of article text lengths by news type')
+        plt.legend(title='News Type')
+        fig_path_7 = "img/text_length_dist.png"
+        plt.tight_layout()
+        plt.savefig(fig_path_7, dpi=300, bbox_inches="tight")
+        print("Successfully saved text_length_dist.png to the img/ folder")
+
+        # plot: percentage of counts of subject between fake and true news
+        number_of_fake = train_df[train_df['target'] == 'Fake'].shape[0]
+        number_of_true = train_df[train_df['target'] == 'True'].shape[0]
+        plot_df = train_df.groupby(['target', 'subject']).size().reset_index()
+        plot_df.columns = ['target', 'subject', 'count']
+        plot_df.loc[plot_df['target'] == 'Fake', 'total'] = number_of_fake
+        plot_df.loc[plot_df['target'] == 'True', 'total'] = number_of_true
+        plot_df['percentage'] = plot_df['count'] / plot_df['total']
+        targets = plot_df['target'].unique()
+        num_targets = len(targets)
+        fig, axes = plt.subplots(
+            nrows=num_targets,
+            ncols=1,
+            figsize=(6, 3.5))
+        if num_targets == 1:
+            axes = [axes]
+        for ax, tgt in zip(axes, targets):
+            subset = plot_df[plot_df['target'] == tgt]
+            ax.barh(
+                subset['subject'],
+                subset['percentage'],
+                color=None
+            )
+            ax.set_title(f"Target = {tgt}", fontsize=10) 
+            ax.set_ylabel("Subject type", fontsize=10)
+            ax.set_xlabel("Percentage of count", fontsize=10)
+        plt.suptitle(
+            "Percentage of counts of (non-)political news in fake and true news",
+            fontsize=12
+        )
+        fig_path_8 = "img/subject_percentage_count.png"
+        plt.tight_layout()
+        plt.savefig(fig_path_8, dpi=300, bbox_inches="tight")
+        print("Successfully saved subject_percentage_count.png to the img/ folder")
+
     except FileNotFoundError as e:
         print(f"File not found: {e.filename}")
     except Exception as e:
