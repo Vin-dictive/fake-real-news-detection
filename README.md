@@ -90,6 +90,23 @@ open a terminal and run the following commands:
    python scripts/00_download_data.py \
       --url="https://raw.githubusercontent.com/Vin-dictive/fake-real-news-detection/refs/heads/main/data/raw/True.csv" \
       --write_to=data/raw
+   
+   python scripts/01_clean_transform_data.py \
+      --raw_true_data=data/raw/True.csv \
+      --raw_fake_data=data/raw/Fake.csv
+
+   python scripts/02_data_validation_1.py \
+      --processed_data_path=data/processed/complete_data.csv
+
+   python scripts/03_data_splitting.py \
+      --data_path=data/processed/complete_data.csv
+
+   python scripts/04_data_validation_2.py \
+      --train_data_path=data/processed/train_data.csv
+
+   python scripts/05_data_preprocessing.py \
+      --train_data_path=data/processed/train_data.csv \
+      --test_data_path=data/processed/test_data.csv
 
    quarto render
    ```
