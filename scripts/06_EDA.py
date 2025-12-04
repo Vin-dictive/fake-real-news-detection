@@ -7,6 +7,7 @@ import os
 import pandas as pd
 from io import StringIO
 import matplotlib.pyplot as plt
+from wordcloud import WordCloud
 
 # terminal command to run script:
 # python scripts/06_EDA.py \
@@ -40,7 +41,40 @@ def main(train_data_path):
         fig_path_1 = "img/fake_real_count.png"
         plt.tight_layout()
         plt.savefig(fig_path_1, dpi=300, bbox_inches="tight")
-        print("Successfully saved fake_real_count.png to img/ folder")
+        print("Successfully saved fake_real_count.png to the img/ folder")
+
+        # processing in preparation for word clouds
+        fake_text = train_df[train_df['target'] == 'Fake']['text']
+        true_text = train_df[train_df['target'] == 'True']['text']
+        # Remove "'s" instances (possessives/contractions)
+        fake_text = fake_text.str.replace(r"\bs\b", "", regex=True)
+        true_text = true_text.str.replace(r"\bs\b", "", regex=True)
+        # remove punctuation
+        fake_text = fake_text.str.replace(r'[^\w\s]', '', regex=True)
+        true_text = true_text.str.replace(r'[^\w\s]', '', regex=True)
+        fake_words = fake_text.str.cat(sep=" ")
+        true_words = true_text.str.cat(sep=" ")
+        fake_titles = train_df[train_df['target'] == 'Fake']['title']
+        true_titles = train_df[train_df['target'] == 'True']['title']
+        # remove punctuation
+        fake_titles = fake_titles.str.replace(r'[^\w\s]', '', regex=True)
+        true_ttitles = true_titles.str.replace(r'[^\w\s]', '', regex=True)
+        # Remove "'s" instances (possessives/contractions)
+        fake_titles = fake_titles.str.replace(r"\bs\b", "", regex=True)
+        true_titles = true_titles.str.replace(r"\bs\b", "", regex=True)
+        fake_title_words = fake_titles.str.cat(sep=" ")
+        true_title_words = true_titles.str.cat(sep=" ") 
+
+        # plot: news title word cloud for fake news
+        wordcloud_title_fake = WordCloud().generate(fake_title_words)
+        plt.figure()
+        plt.imshow(wordcloud_title_fake, interpolation="bilinear")
+        plt.title("Fake articles title words")
+        plt.axis("off")
+        fig_path_2 = "img/fake_title_word_cloud.png"
+        plt.tight_layout()
+        plt.savefig(fig_path_2, dpi=300, bbox_inches="tight")
+        print("Successfully saved fake_title_word_cloud.png to the img/ folder")
 
     except FileNotFoundError as e:
         print(f"File not found: {e.filename}")
