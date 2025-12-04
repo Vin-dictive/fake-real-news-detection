@@ -115,6 +115,28 @@ def main(train_data_path):
                     facecolor = 'black')
         print("Successfully saved true_text_word_cloud.png to the img/ folder")
 
+        # processing in preparation for string length plots
+        train_df["title_length"] = train_df["title"].str.len()
+        train_df["text_length"] = train_df["text"].str.len()
+
+        # plot: title length distribution for fake and true news
+        bins = 30
+        plt.figure(figsize=(8, 5))
+        for label in train_df['target'].unique():
+            subset = train_df[train_df['target'] == label]
+            plt.hist(subset['title_length'],
+                     bins=bins,
+                     alpha=0.6,
+                     label=str(label))
+        plt.xlabel('Title Length (Number of Words)')
+        plt.ylabel('Number of Articles')
+        plt.title('Distribution of article title lengths by news type')
+        plt.legend(title='News Type')
+        fig_path_6 = "img/title_length_dist.png"
+        plt.tight_layout()
+        plt.savefig(fig_path_6, dpi=300, bbox_inches="tight")
+        print("Successfully saved title_length_dist.png to the img/ folder")
+
     except FileNotFoundError as e:
         print(f"File not found: {e.filename}")
     except Exception as e:
