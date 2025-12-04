@@ -60,6 +60,15 @@ def main(processed_data_path):
         print(err.failure_cases)
     except Exception as e:
         print(f"Unexpected error: {e}")
+    
+    try:
+        # Make sure the folder exists
+        os.makedirs("data/processed", exist_ok=True)
+        # Upload cleaned dataset as a .csv file to the data/processed folder
+        processed_data.to_csv('data/processed/complete_data.csv')
+        print(f"Successfully uploaded processed data to data/processed")
+    except Exception as e:
+        print(f"Error uploading processed data: {e}")
 
 if __name__ == '__main__':
     main()
