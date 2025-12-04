@@ -58,6 +58,15 @@ def main(test_data_path, model_path):
         disp.figure_.savefig(confusion_matrix_path, dpi=300, bbox_inches='tight')
         disp.figure_.clf()
         print("Successfully save confusion matrix to the /img folder")
+
+        # classfication report as a text file
+        classfication_report = classification_report(
+            y_test, naive_bayes_model.predict(X_test)
+        )
+        report_path = "data/text/classification_report.txt"
+        with open(report_path, "w") as f:
+            f.write(classfication_report)
+        print("Successfully save classification report as a text file")
         
 
     except FileNotFoundError as e:
