@@ -34,9 +34,6 @@ def transform_data(true_df, fake_df):
     
     # Combine true_df and fake_df into a complete dataset
     complete_df = pd.concat([true_df, fake_df])
-
-    # Shuffle the complete dataframe
-    complete_df = complete_df.sample(frac=1).reset_index(drop=True)
     
     return complete_df
 
