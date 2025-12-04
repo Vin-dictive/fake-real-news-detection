@@ -88,14 +88,17 @@ def main(train_data_path):
         print("Successfully saved true_title_word_cloud.png to the img/ folder")
 
         # plot: news text word cloud for fake news
-        wordcloud_fake = WordCloud().generate(fake_words)
+        wordcloud_fake = WordCloud(
+            background_color='black'
+        ).generate(fake_words)
         plt.figure()
         plt.imshow(wordcloud_fake, interpolation="bilinear")
         plt.title("Fake articles text words")
         plt.axis("off")
         fig_path_4 = "img/fake_text_word_cloud.png"
         plt.tight_layout()
-        plt.savefig(fig_path_4, dpi=300, bbox_inches="tight")
+        plt.savefig(fig_path_4, dpi=300, bbox_inches="tight",
+                    facecolor = 'black')
         print("Successfully saved fake_text_word_cloud.png to the img/ folder")
 
     except FileNotFoundError as e:
