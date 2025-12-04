@@ -147,5 +147,14 @@ def main(train_data_path):
     except Exception as e:
         print(f"Unexpected error: {e}")
 
+    try:
+        # Make sure the folder exists
+        os.makedirs("data/processed", exist_ok=True)
+        # Upload split datasets as a .csv files to the data/processed folder
+        train_data.to_csv('data/processed/train_data.csv', index=False)
+        print(f"Successfully uploaded training data to data/processed")
+    except Exception as e:
+        print(f"Error uploading processed data: {e}")
+
 if __name__ == '__main__':
     main()
