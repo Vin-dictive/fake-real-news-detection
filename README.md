@@ -107,6 +107,17 @@ open a terminal and run the following commands:
    python scripts/05_data_preprocessing.py \
       --train_data_path=data/processed/train_data.csv \
       --test_data_path=data/processed/test_data.csv
+   
+   python scripts/06_EDA.py \
+      --train_data_path=data/processed/train_data.csv
+   
+   python scripts/07_model_fitting.py \
+      --train_data_path=data/processed/train_data.csv \
+      --test_data_path=data/processed/test_data.csv
+   
+   python scripts/08_model_evaluation.py \
+   --test_data_path=data/processed/test_data.csv \
+   --model_path=models/naive_bayes.pkl
 
    quarto render
    ```

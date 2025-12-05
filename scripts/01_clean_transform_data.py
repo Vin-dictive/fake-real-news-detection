@@ -53,7 +53,7 @@ def main(raw_true_data, raw_fake_data):
         os.makedirs("data/processed", exist_ok=True)
         # Upload cleaned dataset as a .csv file to the data/processed folder
         complete_df.to_csv('data/processed/complete_data.csv', index=False)
-        print(f"Successfully uploaded processed data to data/processed")
+        print("Successfully uploaded processed data to data/processed")
     except Exception as e:
         print(f"Error uploading processed data: {e}")
 
