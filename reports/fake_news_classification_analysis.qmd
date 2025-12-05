@@ -46,7 +46,7 @@ import pandera.pandas as pa
 
 # Summary
 
-News is everywhere. In this digital era, there exists both true and fake news on the Internet, making it harder for readers and news agents to differentiate them. So, fake news detection is a technology with rising demands that helps defend information integrity. To solve this problem, applied machine learning is used for binary classification. The fitted Naive Bayes model with `MultinomialNB` as estimator and `title`, `text` and `subject` as features yields a test classification accuracy of `{python} f"{test_score:.3f}"`, where the false positive and false negative rates are both low. The AP score and AUC value of the final model end up being `{python} f"{ap_score:.2f}` and `{python} f"{auc_value:.2f}` respectively, suggesting decent and satisfactory performance. Compared to the baseline dummy classifier, this Naive Bayes model classifies both true and fake news significantly better, which is reflected by consistently high and similar training, cross-validation and test scores. This machine learning model gives us confidence in its decent performance, which can potentially be deployed and used in the reality. But limitations do exist, since the collected data do not cover all possible types of news. So, when deployed in the wild, the model might perform badly in news of other realms, such as entertainment news. If more comprehensive data can be collected, then this model might handle more cases accurately.
+News is everywhere. In this digital era, there exists both true and fake news on the Internet, making it harder for readers and news agents to differentiate them. So, fake news detection is a technology with rising demands that helps defend information integrity. To solve this problem, applied machine learning is used for binary classification. The fitted Naive Bayes model with `MultinomialNB` as estimator and `title`, `text` and `subject` as features yields a test classification accuracy of 0.954, where the false positive and false negative rates are both low. The AP score and AUC value of the final model end up being 0.97 and 0.98 respectively, suggesting decent and satisfactory performance. Compared to the baseline dummy classifier, this Naive Bayes model classifies both true and fake news significantly better, which is reflected by consistently high and similar training, cross-validation and test scores. This machine learning model gives us confidence in its decent performance, which can potentially be deployed and used in the reality. But limitations do exist, since the collected data do not cover all possible types of news. So, when deployed in the wild, the model might perform badly in news of other realms, such as entertainment news. If more comprehensive data can be collected, then this model might handle more cases accurately.
 
 # Introduction
 
@@ -378,7 +378,7 @@ plt.show()
 
 ## Dummy Classifier
 
-The dummy classifier acts as the baseline before building a more advanced model. The strategy used is `"most_frequent"` so that the dummy classifier always predicts the majority class. The goal later on is to build a classification model that does well compared to this dummy.
+The dummy classifier acts as the baseline before building a more advanced model. The strategy used is "most_frequent" so that the dummy classifier always predicts the majority class. The goal later on is to build a classification model that does well compared to this dummy.
 
 ## Naive Bayes Classifier
 
@@ -398,15 +398,14 @@ Note that `RandomizedSearchCV` runs very slowly in this case. To reduce computat
 As a baseline, dummy classifier is first fitted to get the test accuracy.
 
 ```{python}
-# Create dummy classifier for baseline
-dummy_clf = DummyClassifier(strategy='most_frequent')
+dummy_clf = DummyClassifier(strategy="most_frequent")
 dummy_clf.fit(X_train, y_train)
 dummy_pred = dummy_clf.predict(X_test)
 dummy_accuracy = dummy_clf.score(X_test, y_test)
-print(f"Baseline (Dummy) Accuracy: {dummy_accuracy:.3f}")
+print("Baseline (Dummy) Accuracy: {:.3f}".format(dummy_accuracy))
 ```
 
-Using most frequent dummy classifier, the test score is low (only `{python} f"{dummy_accuracy:.3f}`) due to a relatively balanced dataset. Now compare the Naive Bayes model with the dummy classifier. 
+Using most frequent dummy classifier, the test score is low (only `{python} f"{dummy_accuracy:.3f}"`) due to a relatively balanced dataset. Now compare the Naive Bayes model with the dummy classifier. 
 
 ```{python}
 # Create preprocessing pipeline
@@ -447,14 +446,14 @@ random_search = RandomizedSearchCV(pipe,
                                    return_train_score=True,
                                    random_state=123)
 
-train_score = random_search.fit(X_train, y_train)
+random_search.fit(X_train, y_train)
 random_search.best_params_
-best_cv_score = random_search.score(X_train, y_train)
-random_search.best_score_
+train_score = random_search.score(X_train, y_train)
+best_cv_score = random_search.best_score_
 test_score = random_search.score(X_test, y_test)
 ```
 
-After fitting the Naive Bayes model to the training set, the best hyperparameters and CV score can be extracted from the model. The best values of all 3 hyperparameters are in the middle of the search ranges instead of being on the edge, so the search ranges are specified appropriately. Under this model, the training score is `{python} f"{train_score:.3f}`. The best CV score is `{python} f"{best_cv_score:.3f}`, and the test score is `{python} f"{test_score:.3f}`. Since the train, CV and test score are close to one another and are both high, underfitting or overfitting is not a concern here. Compared to dummy classifier, this Naive Bayes model performs a lot better in terms of prediction accuracy, increasing the test score from `{python} f"{dummy_accuracy:.3f}` to `{python} f"{test_score:.3f}`.
+After fitting the Naive Bayes model to the training set, the best hyperparameters and CV score can be extracted from the model. The best values of all 3 hyperparameters are in the middle of the search ranges instead of being on the edge, so the search ranges are specified appropriately. Under this model, the training score is `{python} f"{train_score:.3f}"`. The best CV score is `{python} f"{best_cv_score:.3f}"`, and the test score is `{python} f"{test_score:.3f}"`. Since the train, CV and test score are close to one another and are both high, underfitting or overfitting is not a concern here. Compared to dummy classifier, this Naive Bayes model performs a lot better in terms of prediction accuracy, increasing the test score from `{python} f"{dummy_accuracy:.3f}"` to `{python} f"{test_score:.3f}"`.
 
 The Naive Bayes model demonstrates strong performance in distinguishing between fake and real news articles based on their textual characteristics, as shown in the word clouds (@fig-fake-wordcloud and @fig-true-wordcloud) which reveal distinct vocabulary patterns between fake and real news.
 
@@ -504,7 +503,7 @@ prob_scores = random_search.predict_proba(X_test)[:, 1]
 ap_score = average_precision_score(y_test, prob_scores, pos_label='True')
 ```
 
-The AP score, as a summary of the PR curve, is `{python} f"{ap_score:.2f}`. That fact that the AP score is very close to 1 suggests that our Naive Bayes model's performance is excellent.
+The AP score, as a summary of the PR curve, is `{python} f"{ap_score:.2f}"`. That fact that the AP score is very close to 1 suggests that our Naive Bayes model's performance is excellent.
 
 ```{python}
 #| echo: false
@@ -522,13 +521,13 @@ prob_scores = random_search.predict_proba(X_test)[:, 1]
 auc_value = roc_auc_score(y_test, prob_scores)
 ```
 
-The AUC here is `{python} f"{auc_value:.2f}`, which is much higher than the baseline 0.5, further indicating the satisfactory performance of the Naive Bayes model.
+The AUC here is `{python} f"{auc_value:.2f}"`, which is much higher than the baseline 0.5, further indicating the satisfactory performance of the Naive Bayes model.
 
 # Discussion
 
 ## Result summary
 
-The Naive Bayes model performs decently well due to high accuracy, high true positive rate, high true negative rate, low false postive rate, low false negative rate, high AP score and high AUC value. Apart from these exceptional evaluation metrics, this model also does not throw major concerns such as underfitting or overfitting problems. The training score (`{python} f"{train_score:.3f}`), the best CV score (`{python} f"{best_cv_score:.3f}`), and test score (`{python} f"{test_score:.3f}`) are consistently high and close to one another, so there is no noticeable underfitting or overfitting issue. To summarize, compared to the baseline model (dummy classifier), this Naive Bayes model exhibits major improvements, returning satisfactory results.
+The Naive Bayes model performs decently well due to high accuracy, high true positive rate, high true negative rate, low false postive rate, low false negative rate, high AP score and high AUC value. Apart from these exceptional evaluation metrics, this model also does not throw major concerns such as underfitting or overfitting problems. The training score (`{python} f"{train_score:.3f}"`), the best CV score (`{python} f"{best_cv_score:.3f}"`), and test score (`{python} f"{test_score:.3f}"`) are consistently high and close to one another, so there is no noticeable underfitting or overfitting issue. To summarize, compared to the baseline model (dummy classifier), this Naive Bayes model exhibits major improvements, returning satisfactory results.
 
 ## Discuss whether this is what we expected to find
 
