@@ -72,10 +72,9 @@ def main(train_data_path):
         true_title_words = true_titles.str.cat(sep=" ") 
 
         # plot: news title word cloud for fake news
-        wordcloud_title_fake = WordCloud().generate(fake_title_words)
-        plt.figure()
+        wordcloud_title_fake = WordCloud(width=600, height=350, background_color='white').generate(fake_title_words)
+        plt.figure(figsize=(10, 5))
         plt.imshow(wordcloud_title_fake, interpolation="bilinear")
-        plt.title("Fake articles title words")
         plt.axis("off")
         fig_path_2 = "img/fake_title_word_cloud.png"
         plt.tight_layout()
@@ -83,10 +82,9 @@ def main(train_data_path):
         print("Successfully saved fake_title_word_cloud.png to the img/ folder")
 
         # plot: news title word cloud for true news
-        wordcloud_title_true = WordCloud().generate(true_title_words)
-        plt.figure()
+        wordcloud_title_true = WordCloud(width=600, height=350, background_color='white').generate(true_title_words)
+        plt.figure(figsize=(10, 5))
         plt.imshow(wordcloud_title_true, interpolation="bilinear")
-        plt.title("True articles title words")
         plt.axis("off")
         fig_path_3 = "img/true_title_word_cloud.png"
         plt.tight_layout()
@@ -94,31 +92,23 @@ def main(train_data_path):
         print("Successfully saved true_title_word_cloud.png to the img/ folder")
 
         # plot: news text word cloud for fake news
-        wordcloud_fake = WordCloud(
-            background_color='black'
-        ).generate(fake_words)
-        plt.figure()
+        wordcloud_fake = WordCloud(width=600, height=350, background_color='white').generate(fake_words)
+        plt.figure(figsize=(10, 5))
         plt.imshow(wordcloud_fake, interpolation="bilinear")
-        plt.title("Fake articles text words")
         plt.axis("off")
         fig_path_4 = "img/fake_text_word_cloud.png"
         plt.tight_layout()
-        plt.savefig(fig_path_4, dpi=300, bbox_inches="tight",
-                    facecolor = 'black')
+        plt.savefig(fig_path_4, dpi=300, bbox_inches="tight")
         print("Successfully saved fake_text_word_cloud.png to the img/ folder")
 
         # plot: news text word cloud for true news
-        wordcloud_true = WordCloud(
-            background_color='black'
-        ).generate(true_words)
-        plt.figure(facecolor='black')
+        wordcloud_true = WordCloud(width=600, height=350, background_color='white').generate(true_words)
+        plt.figure(figsize=(10, 5))
         plt.imshow(wordcloud_true, interpolation="bilinear")
-        plt.title("True articles text words")
         plt.axis("off")
         fig_path_5 = "img/true_text_word_cloud.png"
         plt.tight_layout()
-        plt.savefig(fig_path_5, dpi=300, bbox_inches="tight",
-                    facecolor = 'black')
+        plt.savefig(fig_path_5, dpi=300, bbox_inches="tight")
         print("Successfully saved true_text_word_cloud.png to the img/ folder")
 
         # processing in preparation for string length plots

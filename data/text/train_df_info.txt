@@ -1,0 +1,12 @@
+<class 'pandas.core.frame.DataFrame'>
+RangeIndex: 30903 entries, 0 to 30902
+Data columns (total 5 columns):
+ #   Column   Non-Null Count  Dtype 
+---  ------   --------------  ----- 
+ 0   title    30903 non-null  object
+ 1   text     30903 non-null  object
+ 2   subject  30903 non-null  object
+ 3   date     30903 non-null  object
+ 4   target   30903 non-null  object
+dtypes: object(5)
+memory usage: 1.2+ MB

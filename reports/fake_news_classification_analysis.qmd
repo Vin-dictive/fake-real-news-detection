@@ -60,7 +60,11 @@ This report investigates whether a machine learning model can accurately classif
 
 The dataset used in this analysis is the "Fake and Real News Dataset" available on Kaggle [@bisaillon2020]. It contains approximately 40,000 news articles published in the United States between 2015 and 2018. Each row in the dataset represents a news article, with a column for its title, subject, date, and body text.
 
-The raw data from Kaggle was initially provided as two seperate datasets: one for the fake articles and one for the true articles. To prepare the data for modeling, we conducted some validation checks to make sure the data was in the expected format, with no missing observations or duplicate entries. The two datasets were then merged into one large one, with an additional column for the `target` value, indicating whether the article was labeled as "true" or "fake". To support model training and evaluation, we shuffled the rows and split the data into training (80%) and testing (20%) sets. Further validation was conducted on the training set to identify outliers and anomoulous correlations. Finally, we conducted exploratory data analysis (EDA) on the training data set to examine the distribution of the target variable and gain initial insights into the dataset.
+## Data Cleaning and Transforming
+
+The raw data from Kaggle was initially provided as two seperate datasets: one for the fake articles and one for the true articles. To prepare the data for modeling, we conducted some validation checks to make sure the data was in the expected format, with no missing observations or duplicate entries. We then cleaned and standardized the data before combining the true and fake datasets into one complete dataset. A new target column was added to label each article as either True or Fake, and the subject column values were simplified into consistent categories (political vs. non‑political) so that the merged dataset has consistent features ready for analysis.
+
+To support model training and evaluation, we shuffled the rows and split the data into training (80%) and testing (20%) sets. Further validation was conducted on the training set to identify any outliers and anomoulous correlations. Finally, we conducted exploratory data analysis (EDA) on the training data set to examine the distribution of the target variable and gain initial insights into the dataset.
 
 ```{python}
 #| echo: false
@@ -75,7 +79,6 @@ if not (true_url.lower().endswith(".csv") and fake_url.lower().endswith(".csv"))
 true_df = pd.read_csv(true_url)
 fake_df = pd.read_csv(fake_url)
 ```
-
 ```{python}
 #| echo: false
 true_df['target'] = 'True'
@@ -83,7 +86,6 @@ true_df['subject'] = true_df['subject'].replace('politicsNews', 'political')
 true_df['subject'] = true_df['subject'].replace('worldnews', 'non-political')
 true_df.head()
 ```
-
 ```{python}
 #| echo: false
 fake_df['target'] = 'Fake'
@@ -95,211 +97,43 @@ fake_df['subject'] = fake_df['subject'].replace('US_News', 'non-political')
 fake_df['subject'] = fake_df['subject'].replace('Middle-east', 'non-political')
 fake_df.head()
 ```
-
-## Data Validation
-
-**Part 1**: Perform the following data validation checks:
-- Correct column names
-- No empty observations
-- Missingness not beyond expected threshold
-- Correct data types in each column
-- No duplicate observations
-
 ```{python}
 #| echo: false
+#| 
 true_df = true_df.drop_duplicates()
-
-schema = pa.DataFrameSchema(
-    {
-        "title": pa.Column(str),
-        "text": pa.Column(str),
-        "subject": pa.Column(str,
-                             pa.Check(lambda s: s.isna().mean() <= 0.05,
-                                      element_wise=False,
-                                      error = "Too many null values in 'subject' column")),
-        "date": pa.Column(str, nullable=True),
-    },
-    checks = [
-        pa.Check(lambda df: ~df.duplicated().any(), error = "Duplicate rows found."),
-        pa.Check(lambda df: ~(df.isna().all(axis=1)).any(), error = "Empty rows found.")
-    ],
-    drop_invalid_rows=True
-)
-
-schema.validate(true_df, lazy=True)
-```
-
-```{python}
-#| echo: false
 fake_df = fake_df.drop_duplicates()
-schema.validate(fake_df, lazy=True)
-```
 
-**Part 2**: Perform the following data validation checks on `true_df` and `fake_df`:
-- No outlier or anomalous values
-- Correct category levels (i.e., no string mismatches or single values)
-
-```{python}
-#| echo: false
 complete_df = pd.concat([true_df, fake_df])
 
 # Split into train/test data sets
 train_df, test_df = train_test_split(
     complete_df, train_size=0.80, random_state=123
 )
-```
 
-```{python}
-#| echo: false
-schema2 = pa.DataFrameSchema(
-    {
-        "title": pa.Column(
-            str,
-            pa.Check((lambda x: x.str.len().between(5, 1000)), 
-                     error="Outlier title length detected")
-        ),
-        "text": pa.Column(
-            str,
-            pa.Check((lambda x: x.str.len().between(20, 80000)), 
-                     error="Outlier text length detected")
-        ),
-        "subject": pa.Column(
-            str,
-            pa.Check((lambda x: x.isin(['political', 'non-political'])),
-                     error="Incorrect subject category levels")
-        ),
-        "date": pa.Column(
-            str,
-            pa.Check((lambda x: pd.to_datetime(x,
-                                              format='mixed',
-                                              errors='coerce').between(pd.Timestamp('1980-01-01'),
-                                                        pd.Timestamp.now())), 
-                     error="Outlier news date detected")
-        ),
-        "target": pa.Column(
-            str,
-            pa.Check((lambda x: x.isin(['True', 'Fake'])),
-                     error="Incorrect target category levels")
-        )
-    }
-)
-```
-
-```{python}
-#| echo: false
 train_df = train_df[train_df['text'].str.len() >= 20]
 train_df = train_df[pd.to_datetime(train_df['date'], 
                                    format='mixed', 
                                    errors='coerce').notna()]
 
-schema2.validate(train_df, lazy=True)
-```
-
-**Part 3**: Perform the following data validation checks on `complete_df`:
-- Target/response variable follows expected distribution
-- No anomalous correlations between target/response variable and features/explanatory variables
-- No anomalous correlations between features/explanatory variables
-
-```{python}
-#| echo: false
-# check target/response variable follows expected distribution:
-def expected_target_distribution(df):
-    return (df['target'].value_counts(normalize=True) < 0.8).all()
-
-# check no anomalous correlations between target/response variable 
-# and features/explanatory variables
-def normal_corr_target_features(df):
-    target = df['target'].map({
-        "True": 1,
-        "Fake": 0
-    })
-    title_length = df['title'].str.len()
-    text_length = df['text'].str.len()
-    numeric_subject = df['subject'].map({
-        "political": 1,
-        "non-political": 0
-    })
-    # Since date will be dropped later, no need to check its correlation
-
-    for casted_feaure in [title_length, text_length, numeric_subject]:
-        correlation = target.corr(casted_feaure)
-        if correlation > 0.8:
-            return False
-
-    return True
-
-# check no anomalous correlations between features/explanatory variables
-def normal_corr_between_features(df):
-    title_length = df['title'].str.len()
-    text_length = df['text'].str.len()
-    numeric_subject = df['subject'].map({
-        "political": 1,
-        "non-political": 0
-    })
-    # Since date will be dropped later, no need to check its correlation
-
-    corr1 = title_length.corr(text_length)
-    corr2 = title_length.corr(numeric_subject)
-    corr3 = text_length.corr(numeric_subject)
-    for corr in [corr1, corr2, corr3]:
-        if corr > 0.8:
-            return False
-
-    return True
-```
-
-```{python}
-#| echo: false
-schema3 = pa.DataFrameSchema(
-    checks=[pa.Check(expected_target_distribution,
-                     error="Target does not follow expected distribution"),
-            pa.Check(normal_corr_target_features,
-                     error="Anomalous correlations between target and features")]
-)
-```
-
-```{python}
-#| echo: false
-schema3.validate(train_df)
-```
-
-## Data Preprocessing
-
-```{python}
-#| echo: false
 X_train, y_train = train_df.drop(columns=["target"]), train_df["target"]
 X_test, y_test = test_df.drop(columns=["target"]), test_df["target"]
 ```
 
 # Methods
 
-## EDA
+## Exploratory Data Analysis (EDA)
 
-```{python}
-#| echo: false
-train_df.info()
-```
+To begin our exploratory analysis of the training data, we generated a concise summary of the data, to show the non-null value counts and data types for each feature in the training dataset. This was done using the Pandas `.info()` method.
 
-As we can see from this summary, the training data contains `{python} len(train_df)` observations. Each observation represents an article with a title, text, subject, date and target label. Each of these are non-null objects.
+`{include} data/text/train_df_info.txt`
 
-## Count of Fake vs. Real News Articles
+From @fig-training-info, we see that the training data contains `{python} len(train_df)` observations. Each observation represents a news article with a title, text, subject, date and target label. Notably, we also see that there are no missing values in our training data set which means we can proceed without any imputation or row removal. 
 
-```{python}
-#| label: fig-target-distribution
-#| fig-cap: "Count of true vs. fake news articles in training data set"
-#| echo: false
-counts = train_df['target'].value_counts().sort_index()
+### Count of Fake vs. Real News Articles
 
-plt.figure(figsize=(6, 1.5)) 
-plt.barh(counts.index, counts.values)
+To better understand the balance of the target classes, we plotted the counts of articles labeled as `True` and `Fake` in the training dataset.
 
-# Labels and title
-plt.xlabel('Count')
-plt.ylabel('Label')
-plt.title('Count of true and fake news articles in training data')
-
-plt.show()
-```
+![Count of true vs. fake news articles in training dataset](img/fake_real_count.png){#fig-fake-real-count width=40%}
 
 ```{python}
 #| echo: false
@@ -307,72 +141,49 @@ fake_count = train_df['target'].value_counts()['Fake']
 true_count = train_df['target'].value_counts()['True']
 ```
 
-From @fig-target-distribution, we can see that the training dataset is fairly balanced, with `{python} fake_count` fake news articles and `{python} true_count` real news articles. This balance may help to prevent bias towards one class over the other when training our model.
+From @fig-fake-real-count, we can see that the training dataset is fairly balanced, with `{python} fake_count` fake news articles and `{python} true_count` real news articles. This balance may help to prevent bias towards one class over the other when training our model and increases the likelihood that it will learn to distinguish between fake and real news effectively.
 
-```{python}
-#| echo: false
-fake_text = train_df[train_df['target'] == 'Fake']['text']
-true_text = train_df[train_df['target'] == 'True']['text']
+### Word Clouds for Title Column
 
-# Remove "'s" instances (possessives/contractions)
-fake_text = fake_text.str.replace(r"\bs\b", "", regex=True)
-true_text = true_text.str.replace(r"\bs\b", "", regex=True)
+Beyond class counts, it is useful to explore the language patterns in the dataset. Word clouds provide a quick visual summary of the most frequent words appearing in article titles. By comparing words appearing in fake and real news titles, we can identify differences in vocabulary, tone, or emphasis that may help models learn discriminative features.
 
-# remove punctuation
-fake_text = fake_text.str.replace(r'[^\w\s]', '', regex=True)
-true_text = true_text.str.replace(r'[^\w\s]', '', regex=True)
+Before generating the word clouds, we cleaned the text by removing punctuation and possessive contractions (e.g., 's). This ensures that the visualization highlights more meaningful words.
 
-fake_words = fake_text.str.cat(sep=" ")
-true_words = true_text.str.cat(sep=" ")
+![Word cloud for titles of fake news articles](img/fake_title_word_cloud.png){#fig-fake-wordcloud width=40%}
 
-fake_titles = train_df[train_df['target'] == 'Fake']['title']
-true_titles = train_df[train_df['target'] == 'True']['title']
+![Word cloud for titles of true news articles](img/true_title_word_cloud.png){#fig-true-wordcloud width=40%}
 
-# remove punctuation
-fake_titles = fake_titles.str.replace(r'[^\w\s]', '', regex=True)
-true_ttitles = true_titles.str.replace(r'[^\w\s]', '', regex=True)
+### Word Clouds for Text Column
 
-# Remove "'s" instances (possessives/contractions)
-fake_titles = fake_titles.str.replace(r"\bs\b", "", regex=True)
-true_titles = true_titles.str.replace(r"\bs\b", "", regex=True)
+The most prominent words in the fake news titles include "VIDEO", "Trump" and "Obama". The most common words in the true news titles include "Trump", "US" and "White House".
 
-fake_title_words = fake_titles.str.cat(sep=" ")
-true_title_words = true_titles.str.cat(sep=" ")
-```
+We can see that "Trump" appears frequently in both fake and true news titles, which means that it may not give much discriminatory power when classifying articles. However, words like "VIDEO", that appear much more frequently in fake news titles, may help the model identify fake news articles.
 
-## Word Clouds for Titles Column
+![Word cloud for text of fake news articles](img/fake_text_word_cloud.png){#fig-fake-text-wordcloud width=40%}
 
-```{python}
-#| label: fig-fake-wordcloud
-#| fig-cap: "Word cloud for titles of fake news articles"
-#| fig-width: 7
-#| fig-height: 3.5
-#| echo: false
-# Generate word cloud for fake news titles
-fake_wordcloud = WordCloud(width=800, height=400, background_color='white').generate(fake_title_words)
+![Word cloud for text of true news articles](img/true_text_word_cloud.png){#fig-true-text-wordcloud width=40%}
 
-plt.figure(figsize=(10, 5))
-plt.imshow(fake_wordcloud, interpolation='bilinear')
-plt.axis('off')
-plt.title('Word Cloud for Fake News Titles')
-plt.show()
-```
+The most commonly used words in the body text of fake news articles include "Trump", "said", and "one". The most frequent words in true news articles are "Trump", "said", and "United State". Given that there is more overlap in the common words used in the body text of fake and true news articles compared to the titles, the titles may provide more distinctive features for classification.
 
-```{python}
-#| label: fig-true-wordcloud
-#| fig-cap: "Word cloud for titles of true news articles"
-#| fig-width: 7
-#| fig-height: 3.5
-#| echo: false
-# Generate word cloud for true news titles
-true_wordcloud = WordCloud(width=800, height=400, background_color='white').generate(true_title_words)
+### Comparing title and text length between fake and real news articles
 
-plt.figure(figsize=(10, 5))
-plt.imshow(true_wordcloud, interpolation='bilinear')
-plt.axis('off')
-plt.title('Word Cloud for True News Titles')
-plt.show()
-```
+Another important aspect of exploratory analysis is to examine whether simple structural features of the articles — such as the length of titles and body text — differ between fake and real news. To do this, we generated histograms that show the distribution of article title lengths and article text lengths for fake and true news.
+
+![Distribution of article title lengths for fake and true news articles](img/title_length_dist.png){#fig-length-distributions width=40%}
+
+![Distribution of article text lengths for fake and true news articles](img/text_length_dist.png){#fig-text-length-distributions width=40%}
+
+From @fig-length-distributions, we can see that the length of true news titles appears to have bell-shaped distribution, while the length of fake news titles is right-skewed. This suggests that if the title of a news article is particularly long, it may be more likely to be fake news. This strategy may be utilized to grab readers' attention with sensational or clickbait-style headlines.
+
+When comparing the body text lengths in @fig-text-length-distributions, we can see that both fake and true news articles have right-skewed distributions. Their distributions are quite similar, indicating that body text length may not be a strong indicator of whether an article is fake or true news.
+
+### Comparing the percentage of counts of subjects between fake and real news articles
+
+Another feature of our dataset is the subject of the news article. Here, we examine whether the suject matter of articles differs between fake and real news. In our dataset, each article is labeled as either *political* or *non‑political*. To compare distributions fairly, we calculated the percentage of articles in each subject category within the fake and true subsets of the training data and plotted the results.
+
+![Percentage of counts of news subjects in fake vs. true news articles](img/subject_percentage_count.png){#fig-subject-counts width=40%}
+
+As shown in @fig-subject-counts, non-political news accounts for a larger portion of the fake news, while there is a larger percentage of political news in the true news. The difference of percentages exists but is not conspicuous, suggesting this engineered feature `subject` may still be useful in predicting whether news is true. Therefore, the feature `subject` (political vs non-political) is included in the classification model below.
 
 ## Classfication Modeling Analysis
 
