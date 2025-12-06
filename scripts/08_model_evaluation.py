@@ -28,15 +28,56 @@ from sklearn.metrics import ConfusionMatrixDisplay, PrecisionRecallDisplay, RocC
 #     --model_path=models/naive_bayes.pkl
 
 def load_data(path):
+    """
+    Load a dataset from a CSV file.
+
+    Parameters
+    ----------
+    path : str
+        Path to the CSV file containing the dataset.
+
+    Returns
+    -------
+    pd.DataFrame
+        DataFrame containing the loaded dataset.
+    """
     return pd.read_csv(path)
 
 def ravel_transform(x):
+    """
+    Apply ravel transformation to the array x.
+
+    Parameters
+    ----------
+    x : array
+        Input array to be flattened.
+
+    Returns
+    -------
+    np.ndarray
+        1-D flattened array
+    """
     return np.ravel(x)
 
 @click.command()
 @click.option('--test_data_path', type=str, required=True, help="Path to testing data CSV")
 @click.option('--model_path', type=str, required=True, help="Path to saved Naive Bayes fitted model")
 def main(test_data_path, model_path):
+    """
+    Main function to perform model evaluation of the Naive Bayes model.
+    - Load the test dataset and the saved Naive Bayes model from the provided path.
+    - Produce confusion matrix, classification report, PR curve, ROC curve analysis
+    - Save evaluation results as png files in the 'img' folder or txt files in the 'data/text/' folder.
+
+    Parameters
+    ----------
+    test_data_path : str
+        Path to the test dataset CSV file.
+    
+    model_path : str
+        Path to the saved fitted model.    
+    """
+
     try:
         # Load test data
         test_df = load_data(test_data_path)

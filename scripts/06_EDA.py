@@ -14,11 +14,36 @@ from wordcloud import WordCloud
 #     --train_data_path=data/processed/train_data.csv
 
 def load_data(path):
+    """
+    Load a dataset from a CSV file.
+
+    Parameters
+    ----------
+    path : str
+        Path to the CSV file containing the dataset.
+
+    Returns
+    -------
+    pd.DataFrame
+        DataFrame containing the loaded dataset.
+    """
     return pd.read_csv(path)
 
 @click.command()
 @click.option('--train_data_path', type=str, required=True, help="Path to training data CSV")
 def main(train_data_path):
+    """
+    Main function to perform EDA.
+    - Load the training dataset from the provided path.
+    - Produce 10 EDA plots and/or text tables
+    - Save the results as png files in the 'img' folder or txt files in the 'data/text/' folder.
+
+    Parameters
+    ----------
+    train_data_path : str
+        Path to the training dataset CSV file.
+    """
+
     try:
         # Load train dataset
         train_df = load_data(train_data_path)

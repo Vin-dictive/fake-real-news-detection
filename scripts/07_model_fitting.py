@@ -30,12 +30,46 @@ from scipy.stats import expon, lognorm, loguniform, randint, uniform, norm, rand
 #     --test_data_path=data/processed/test_data.csv
 
 def load_data(path):
+    """
+    Load a dataset from a CSV file.
+
+    Parameters
+    ----------
+    path : str
+        Path to the CSV file containing the dataset.
+
+    Returns
+    -------
+    pd.DataFrame
+        DataFrame containing the loaded dataset.
+    """
     return pd.read_csv(path)
 
 def ravel_transform(x):
+    """
+    Apply ravel transformation to the array x.
+
+    Parameters
+    ----------
+    x : array
+        Input array to be flattened.
+
+    Returns
+    -------
+    np.ndarray
+        1-D flattened array
+    """
     return np.ravel(x)
 
 def progress_indicator(stop_event):
+    """
+    Display a message in console while model fitting until it stops
+
+    Parameters
+    ----------
+    stop_event : threading.Event
+        An event that indicates when the model fitting stops.
+    """
     chars = "|/-\\"
     i = 0
     while not stop_event.is_set():
@@ -48,6 +82,21 @@ def progress_indicator(stop_event):
 @click.option('--train_data_path', type=str, required=True, help="Path to training data CSV")
 @click.option('--test_data_path', type=str, required=True, help="Path to testing data CSV")
 def main(train_data_path, test_data_path):
+    """
+    Main function to perform model fitting.
+    - Load the train and test dataset from the provided path.
+    - Fit two classification ML models: dummy classifier and Naive Bayes model.
+    - Save the fitted models to the "models/" folder.
+
+    Parameters
+    ----------
+    train_data_path : str
+        Path to the train dataset CSV file.
+
+    test_data_path : str
+        Path to the test dataset CSV file.
+    """
+
     try:
         # Load train and test datasets
         train_df = load_data(train_data_path)
@@ -71,6 +120,8 @@ def main(train_data_path, test_data_path):
         print("Dummy classfier model is saved to the models/ folder")
 
         # Naive Bayes classifier model
+
+        # make column-specific preprocessing pipelines for the column 'title' and 'text'
         title_feature = 'title'
         text_feature = 'text'
         categorical_feature = ['subject']
@@ -83,6 +134,8 @@ def main(train_data_path, test_data_path):
             FunctionTransformer(ravel_transform), 
             CountVectorizer()
         )
+
+        # make overall preprocessor for all columns using ColumnTransformer
         preprocessor = ColumnTransformer(
             [
                 ("one_hot", OneHotEncoder(drop="if_binary"), categorical_feature),
@@ -91,24 +144,33 @@ def main(train_data_path, test_data_path):
                 ("drop", "drop", drop_feature)
             ]
         )
+
+        # make Naive Bayes model's ML pipeline
         pipe = make_pipeline(preprocessor, MultinomialNB())
+
+        # make hyperparameter distribution to search from
         param_dist = {
             "columntransformer__title_vectorizer__countvectorizer__max_features": randint(1, 200),
             "columntransformer__text_vectorizer__countvectorizer__max_features": randint(1, 5000),
             "multinomialnb__alpha": 10.0 ** np.arange(-7, 1)
         }
+
+        # define randomized search object using cross validation
         random_search = RandomizedSearchCV(pipe, 
                                            param_distributions=param_dist, 
                                            n_iter=10, n_jobs=-1,
                                            return_train_score=True,
                                            random_state=123)
         
+        # print out a pending message in console to show model is still fitting
         stop_event = threading.Event()
         progress_thread = threading.Thread(target=progress_indicator, args=(stop_event,))
         progress_thread.start()
         
+        # fit Naive Bayes model to the training set
         random_search.fit(X_train, y_train)
         
+        # print out a completed message in console when model fitting is done
         stop_event.set()
         progress_thread.join()
         print("\rModel fitting completed!" + " " * 20) 
