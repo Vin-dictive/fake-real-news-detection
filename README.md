@@ -153,16 +153,57 @@ fake-real-news-detection/
 │   └── raw/
 │       ├── Fake.csv              # Fake news articles dataset
 │       └── True.csv              # Real news articles dataset
+│   └── text/
+│       ├── classification_report.txt
+│       ├── target_value_counts.txt
+│       ├── train_df_info.txt
+├── docs/
+│   └── img/
+│       ├── confusion_matrix.png
+│       ├── fake_real_count.png
+│       ├── fake_text_word_cloud.png
+│       ├── fake_title_word_cloud.png
+│       ├── pr_curve.png
+│       ├── roc_curve.png
+│       ├── subject_percentage_count.png
+│       ├── text_length_dist.png
+│       ├── title_length_dist.png
+│       ├── true_text_word_cloud.png
+│       ├── true_title_word_cloud.png
+│   └── reports/
+│       ├── fake_news_classification_analysis.html
+│       ├── fake_news_classification_analysis.pdf
 ├── img/
+│   ├── confusion_matrix.png
+│   ├── fake_real_count.png
+│   ├── fake_text_word_cloud.png
+│   ├── fake_title_word_cloud.png
+│   ├── pr_curve.png
 │   ├── readme_1.png              
 │   ├── readme_2.png
 │   ├── readme_3.png              
 │   └── readme_4.png
+│   └── roc_curve.png
+│   └── subject_percentage_count.png
+│   └── text_length_dist.png
+│   └── title_length_dist.png
+│   └── true_text_word_cloud.png
+│   └── true_title_word_cloud.png
 ├── notebooks/
 │   └── 001_fake_news_classification_analysis.ipynb  # Main analysis and modeling notebook
 ├── reports/                      # Generated reports and outputs
+│   └── fake_news_classification_analysis.qmd
+│   └── references.bib
 ├── scripts/
 │   └── 00_download_data.py       # Data download script
+│   └── 01_clean_transform_data.py
+│   └── 02_data_validation_1.py
+│   └── 03_data_splitting.py
+│   └── 04_data_validation_2.py
+│   └── 05_data_preprocessing.py
+│   └── 06_EDA.py
+│   └── 07_model_fitting.py
+│   └── 08_model_evaluation.py
 ├── .gitignore
 ├── CODE_OF_CONDUCT.md
 ├── conda-lock.yml
@@ -170,8 +211,9 @@ fake-real-news-detection/
 ├── docker-compose.yml
 ├── Dockerfile
 ├── environment.yml
-├── LICENSE
+├── LICENSE.md
 └── README.md
+└── _quarto.yml
 ```
 
 ## Contributors
