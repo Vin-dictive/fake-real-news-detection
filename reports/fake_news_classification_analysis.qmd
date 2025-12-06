@@ -23,34 +23,17 @@ editor: source
 #| echo: false
 import numpy as np
 import pandas as pd
-from sklearn.dummy import DummyClassifier
-from sklearn.feature_extraction.text import CountVectorizer
-from sklearn.model_selection import(
-    GridSearchCV,
-    RandomizedSearchCV,
-    cross_validate,
-    train_test_split,
-)
-from sklearn.naive_bayes import BernoulliNB, MultinomialNB
-from sklearn.dummy import DummyClassifier
-from sklearn.pipeline import Pipeline, make_pipeline
-import matplotlib.pyplot as plt
-from wordcloud import WordCloud
-from sklearn.compose import ColumnTransformer
-from sklearn.feature_extraction.text import CountVectorizer
-from sklearn.preprocessing import OneHotEncoder, FunctionTransformer
-from scipy.stats import expon, lognorm, loguniform, randint, uniform, norm, randint
 from sklearn.metrics import ConfusionMatrixDisplay, PrecisionRecallDisplay, RocCurveDisplay, classification_report,average_precision_score, roc_auc_score
-import pandera.pandas as pa
+import pickle
 ```
 
 # Summary
 
-News is everywhere. In this digital era, there exists both true and fake news on the Internet, making it harder for readers and news agents to differentiate them. So, fake news detection is a technology with rising demands that helps defend information integrity. To solve this problem, applied machine learning is used for binary classification. The fitted Naive Bayes model with `MultinomialNB` as estimator and `title`, `text` and `subject` as features yields a test classification accuracy of 0.954, where the false positive and false negative rates are both low. The AP score and AUC value of the final model end up being 0.97 and 0.98 respectively, suggesting decent and satisfactory performance. Compared to the baseline dummy classifier, this Naive Bayes model classifies both true and fake news significantly better, which is reflected by consistently high and similar training, cross-validation and test scores. This machine learning model gives us confidence in its decent performance, which can potentially be deployed and used in the reality. But limitations do exist, since the collected data do not cover all possible types of news. So, when deployed in the wild, the model might perform badly in news of other realms, such as entertainment news. If more comprehensive data can be collected, then this model might handle more cases accurately.
+News is everywhere. In this digital era, there exists both true and fake news on the Internet, making it harder for readers and news agents to differentiate them. This makes fake news detection a technology with rising demands to help defend information integrity. To solve this problem, applied machine learning is used for binary classification. The fitted Naive Bayes model with `MultinomialNB` as estimator and `title`, `text` and `subject` as features yields a test classification accuracy of 0.954, where the false positive and false negative rates are both low. The AP score and AUC value of the final model end up being 0.97 and 0.98 respectively, suggesting decent and satisfactory performance. Compared to the baseline dummy classifier, this Naive Bayes model classifies both true and fake news significantly better, which is reflected by consistently high and similar training, cross-validation and test scores. This machine learning model gives us confidence in its performance, which points to its potential to be deployed and used in the real world. Despite this, it does have limitations since the training data does not cover all possible types of news. When deployed in the wild, the model might perform badly in news of other realms, such as entertainment news. If more comprehensive data can be collected, then this model might handle various cases more accurately.
 
 # Introduction
 
-"Fake news", also known as disinformation, is deliberately misleading or false information presented as legitimate news [@servicecanada2024]. Its rapid spread in recent years has becoming a pressing concern, particularly with the rise of social media platforms that accelerate the dissemination of content. These platforms are designed with the primary objective of capturing and retaining user attention for as long as possible. To that end, fake news often exploits this design to gain traction.
+"Fake news", also known as disinformation, is deliberately misleading or false information presented as legitimate news [@servicecanada2024]. Its rapid spread in recent years has become a pressing concern, particularly with the rise of social media platforms that accelerate the dissemination of content. These platforms are designed with the primary objective of capturing and retaining user attention for as long as possible [@pen]. To that end, fake news often exploits this design to gain traction.
 
 There is high public awareness of this issue in Canada. In 2023, Statistics Canada reported that 59% of Canadians admitted that they were "very or extremely concerned about online misinformation" in the Survey Series on People and their Communities [@bilodeau2024]. In the United States, the concept of "fake news" grew in popularity during the 2016 presidential election. @allcott2017 estimated that false news stories were shared on Facebook at least 38 million times in the 3 months leading up to the election. Such widespread circulation of this false information can have serious consequences, including influencing public opinion and undermining trust in legitimate news sources. Thus, methods for detecting fake news may be beneficial in mitigating its spread.
 
@@ -58,331 +41,96 @@ This report investigates whether a machine learning model can accurately classif
 
 # Data
 
-The dataset used in this analysis is the "Fake and Real News Dataset" available on Kaggle [@bisaillon2020]. It contains approximately 40,000 news articles published in the United States between 2015 and 2018. Each row in the dataset represents a news article, with a column for its title, subject, date, and body text.
+The dataset used in this analysis is the "Fake and Real News Dataset" available on Kaggle [@bisaillon2023]. It contains approximately 40,000 news articles published in the United States between 2015 and 2018. Each row in the dataset represents a news article, with a column for its title, subject, date, and body text.
 
-The raw data from Kaggle was initially provided as two seperate datasets: one for the fake articles and one for the true articles. To prepare the data for modeling, we conducted some validation checks to make sure the data was in the expected format, with no missing observations or duplicate entries. The two datasets were then merged into one large one, with an additional column for the `target` value, indicating whether the article was labeled as "true" or "fake". To support model training and evaluation, we shuffled the rows and split the data into training (80%) and testing (20%) sets. Further validation was conducted on the training set to identify outliers and anomoulous correlations. Finally, we conducted exploratory data analysis (EDA) on the training data set to examine the distribution of the target variable and gain initial insights into the dataset.
+## Data Cleaning and Transforming
 
-```{python}
-#| echo: false
-true_url = "../data/raw/True.csv" 
-fake_url = "../data/raw/Fake.csv"
+The raw data from Kaggle was initially provided as two seperate datasets: one for the fake articles and one for the true articles. To prepare the data for modeling, we conducted some validation checks to make sure the data was in the expected format, with no missing observations or duplicate entries. We then cleaned and standardized the data before combining the true and fake datasets into one complete dataset. A new target column was added to label each article as either True or Fake, and the subject column values were simplified into consistent categories (political vs. non‑political) so that the merged dataset has consistent features ready for analysis.
 
-# Check if file format is .csv
-if not (true_url.lower().endswith(".csv") and fake_url.lower().endswith(".csv")):
-    raise ValueError("Data file must be in .csv format.")
-
-# Read in data from .csv files
-true_df = pd.read_csv(true_url)
-fake_df = pd.read_csv(fake_url)
-```
-
-```{python}
-#| echo: false
-true_df['target'] = 'True'
-true_df['subject'] = true_df['subject'].replace('politicsNews', 'political')
-true_df['subject'] = true_df['subject'].replace('worldnews', 'non-political')
-true_df.head()
-```
-
-```{python}
-#| echo: false
-fake_df['target'] = 'Fake'
-fake_df['subject'] = fake_df['subject'].replace('politics', 'political')
-fake_df['subject'] = fake_df['subject'].replace('left-news', 'political')
-fake_df['subject'] = fake_df['subject'].replace('Government News', 'political')
-fake_df['subject'] = fake_df['subject'].replace('News', 'non-political')
-fake_df['subject'] = fake_df['subject'].replace('US_News', 'non-political')
-fake_df['subject'] = fake_df['subject'].replace('Middle-east', 'non-political')
-fake_df.head()
-```
-
-## Data Validation
-
-**Part 1**: Perform the following data validation checks:
-- Correct column names
-- No empty observations
-- Missingness not beyond expected threshold
-- Correct data types in each column
-- No duplicate observations
-
-```{python}
-#| echo: false
-true_df = true_df.drop_duplicates()
-
-schema = pa.DataFrameSchema(
-    {
-        "title": pa.Column(str),
-        "text": pa.Column(str),
-        "subject": pa.Column(str,
-                             pa.Check(lambda s: s.isna().mean() <= 0.05,
-                                      element_wise=False,
-                                      error = "Too many null values in 'subject' column")),
-        "date": pa.Column(str, nullable=True),
-    },
-    checks = [
-        pa.Check(lambda df: ~df.duplicated().any(), error = "Duplicate rows found."),
-        pa.Check(lambda df: ~(df.isna().all(axis=1)).any(), error = "Empty rows found.")
-    ],
-    drop_invalid_rows=True
-)
-
-schema.validate(true_df, lazy=True)
-```
-
-```{python}
-#| echo: false
-fake_df = fake_df.drop_duplicates()
-schema.validate(fake_df, lazy=True)
-```
-
-**Part 2**: Perform the following data validation checks on `true_df` and `fake_df`:
-- No outlier or anomalous values
-- Correct category levels (i.e., no string mismatches or single values)
-
-```{python}
-#| echo: false
-complete_df = pd.concat([true_df, fake_df])
-
-# Split into train/test data sets
-train_df, test_df = train_test_split(
-    complete_df, train_size=0.80, random_state=123
-)
-```
-
-```{python}
-#| echo: false
-schema2 = pa.DataFrameSchema(
-    {
-        "title": pa.Column(
-            str,
-            pa.Check((lambda x: x.str.len().between(5, 1000)), 
-                     error="Outlier title length detected")
-        ),
-        "text": pa.Column(
-            str,
-            pa.Check((lambda x: x.str.len().between(20, 80000)), 
-                     error="Outlier text length detected")
-        ),
-        "subject": pa.Column(
-            str,
-            pa.Check((lambda x: x.isin(['political', 'non-political'])),
-                     error="Incorrect subject category levels")
-        ),
-        "date": pa.Column(
-            str,
-            pa.Check((lambda x: pd.to_datetime(x,
-                                              format='mixed',
-                                              errors='coerce').between(pd.Timestamp('1980-01-01'),
-                                                        pd.Timestamp.now())), 
-                     error="Outlier news date detected")
-        ),
-        "target": pa.Column(
-            str,
-            pa.Check((lambda x: x.isin(['True', 'Fake'])),
-                     error="Incorrect target category levels")
-        )
-    }
-)
-```
-
-```{python}
-#| echo: false
-train_df = train_df[train_df['text'].str.len() >= 20]
-train_df = train_df[pd.to_datetime(train_df['date'], 
-                                   format='mixed', 
-                                   errors='coerce').notna()]
-
-schema2.validate(train_df, lazy=True)
-```
-
-**Part 3**: Perform the following data validation checks on `complete_df`:
-- Target/response variable follows expected distribution
-- No anomalous correlations between target/response variable and features/explanatory variables
-- No anomalous correlations between features/explanatory variables
-
-```{python}
-#| echo: false
-# check target/response variable follows expected distribution:
-def expected_target_distribution(df):
-    return (df['target'].value_counts(normalize=True) < 0.8).all()
-
-# check no anomalous correlations between target/response variable 
-# and features/explanatory variables
-def normal_corr_target_features(df):
-    target = df['target'].map({
-        "True": 1,
-        "Fake": 0
-    })
-    title_length = df['title'].str.len()
-    text_length = df['text'].str.len()
-    numeric_subject = df['subject'].map({
-        "political": 1,
-        "non-political": 0
-    })
-    # Since date will be dropped later, no need to check its correlation
-
-    for casted_feaure in [title_length, text_length, numeric_subject]:
-        correlation = target.corr(casted_feaure)
-        if correlation > 0.8:
-            return False
-
-    return True
-
-# check no anomalous correlations between features/explanatory variables
-def normal_corr_between_features(df):
-    title_length = df['title'].str.len()
-    text_length = df['text'].str.len()
-    numeric_subject = df['subject'].map({
-        "political": 1,
-        "non-political": 0
-    })
-    # Since date will be dropped later, no need to check its correlation
-
-    corr1 = title_length.corr(text_length)
-    corr2 = title_length.corr(numeric_subject)
-    corr3 = text_length.corr(numeric_subject)
-    for corr in [corr1, corr2, corr3]:
-        if corr > 0.8:
-            return False
-
-    return True
-```
-
-```{python}
-#| echo: false
-schema3 = pa.DataFrameSchema(
-    checks=[pa.Check(expected_target_distribution,
-                     error="Target does not follow expected distribution"),
-            pa.Check(normal_corr_target_features,
-                     error="Anomalous correlations between target and features")]
-)
-```
-
-```{python}
-#| echo: false
-schema3.validate(train_df)
-```
-
-## Data Preprocessing
-
-```{python}
-#| echo: false
-X_train, y_train = train_df.drop(columns=["target"]), train_df["target"]
-X_test, y_test = test_df.drop(columns=["target"]), test_df["target"]
-```
+To support model training and evaluation, we shuffled the rows and split the data into training (80%) and testing (20%) sets. Further validation was conducted on the training set to identify any outliers and anomoulous correlations. Finally, we conducted exploratory data analysis (EDA) on the training data set to examine the distribution of the target variable and gain initial insights into the dataset.
 
 # Methods
 
-## EDA
+## Exploratory Data Analysis (EDA)
 
 ```{python}
 #| echo: false
+train_df = pd.read_csv("../data/processed/train_data.csv")
+
+fake_count = int(train_df['target'].value_counts()['Fake'])
+true_count = int(train_df['target'].value_counts()['True'])
+```
+
+To begin our exploratory analysis of the training data, we generated a concise summary of the data, to show the non-null value counts and data types for each feature in the training dataset. This was done using the Pandas `.info()` method.
+
+```{python}
+#| echo: false
+#| label: fig-train-info
+#| fig-cap: "Summarised information on training data set"
 train_df.info()
 ```
 
-As we can see from this summary, the training data contains `{python} len(train_df)` observations. Each observation represents an article with a title, text, subject, date and target label. Each of these are non-null objects.
+From @fig-train-info, we see that the training data contains `{python} len(train_df)` observations. Each observation represents a news article with a title, text, subject, date and target label. Notably, we also see that there are no missing values in our training data set which means we can proceed without any imputation or row removal. 
 
-## Count of Fake vs. Real News Articles
+### Count of Fake vs. Real News Articles
 
-```{python}
-#| label: fig-target-distribution
-#| fig-cap: "Count of true vs. fake news articles in training data set"
-#| echo: false
-counts = train_df['target'].value_counts().sort_index()
+To better understand the balance of the target classes, we plotted the counts of articles labeled as `True` and `Fake` in the training dataset.
 
-plt.figure(figsize=(6, 1.5)) 
-plt.barh(counts.index, counts.values)
+![Count of true vs. fake news articles in training dataset](../img/fake_real_count.png){#fig-fake-real-count width=70%}
 
-# Labels and title
-plt.xlabel('Count')
-plt.ylabel('Label')
-plt.title('Count of true and fake news articles in training data')
+From @fig-fake-real-count, we can see that the training dataset is fairly balanced, with `{python} fake_count` fake news articles and `{python} true_count` real news articles. This balance may help to prevent bias towards one class over the other when training our model and increases the likelihood that it will learn to distinguish between fake and real news effectively.
 
-plt.show()
-```
+### Word Clouds for Title Column
 
-```{python}
-#| echo: false
-fake_count = train_df['target'].value_counts()['Fake']
-true_count = train_df['target'].value_counts()['True']
-```
+Beyond class counts, it is useful to explore the language patterns in the dataset. Word clouds provide a quick visual summary of the most frequent words appearing in article titles. By comparing words appearing in fake and real news titles, we can identify differences in vocabulary, tone, or emphasis that may help models learn discriminative features.
 
-From @fig-target-distribution, we can see that the training dataset is fairly balanced, with `{python} fake_count` fake news articles and `{python} true_count` real news articles. This balance may help to prevent bias towards one class over the other when training our model.
+Before generating the word clouds, we cleaned the text by removing punctuation and possessive contractions (e.g., 's). This ensures that the visualization highlights more meaningful words.
 
-```{python}
-#| echo: false
-fake_text = train_df[train_df['target'] == 'Fake']['text']
-true_text = train_df[train_df['target'] == 'True']['text']
+![Word cloud for titles of fake news articles](../img/fake_title_word_cloud.png){#fig-fake-wordcloud width=60%}
 
-# Remove "'s" instances (possessives/contractions)
-fake_text = fake_text.str.replace(r"\bs\b", "", regex=True)
-true_text = true_text.str.replace(r"\bs\b", "", regex=True)
+![Word cloud for titles of true news articles](../img/true_title_word_cloud.png){#fig-true-wordcloud width=60%}
 
-# remove punctuation
-fake_text = fake_text.str.replace(r'[^\w\s]', '', regex=True)
-true_text = true_text.str.replace(r'[^\w\s]', '', regex=True)
+### Word Clouds for Text Column
 
-fake_words = fake_text.str.cat(sep=" ")
-true_words = true_text.str.cat(sep=" ")
+The most prominent words in the fake news titles include "VIDEO", "Trump" and "Obama". The most common words in the true news titles include "Trump", "US" and "White House".
 
-fake_titles = train_df[train_df['target'] == 'Fake']['title']
-true_titles = train_df[train_df['target'] == 'True']['title']
+We can see that "Trump" appears frequently in both fake and true news titles, which means that it may not give much discriminatory power when classifying articles. However, words like "VIDEO", that appear much more frequently in fake news titles, may help the model identify fake news articles.
 
-# remove punctuation
-fake_titles = fake_titles.str.replace(r'[^\w\s]', '', regex=True)
-true_ttitles = true_titles.str.replace(r'[^\w\s]', '', regex=True)
+![Word cloud for text of fake news articles](../img/fake_text_word_cloud.png){#fig-fake-text-wordcloud width=60%}
 
-# Remove "'s" instances (possessives/contractions)
-fake_titles = fake_titles.str.replace(r"\bs\b", "", regex=True)
-true_titles = true_titles.str.replace(r"\bs\b", "", regex=True)
+![Word cloud for text of true news articles](../img/true_text_word_cloud.png){#fig-true-text-wordcloud width=60%}
 
-fake_title_words = fake_titles.str.cat(sep=" ")
-true_title_words = true_titles.str.cat(sep=" ")
-```
+The most commonly used words in the body text of fake news articles include "Trump", "said", and "one". The most frequent words in true news articles are "Trump", "said", and "United State". Given that there is more overlap in the common words used in the body text of fake and true news articles compared to the titles, the titles may provide more distinctive features for classification.
 
-## Word Clouds for Titles Column
+### Comparing Title and Text Length between Fake and Real News Articles
 
-```{python}
-#| label: fig-fake-wordcloud
-#| fig-cap: "Word cloud for titles of fake news articles"
-#| fig-width: 7
-#| fig-height: 3.5
-#| echo: false
-# Generate word cloud for fake news titles
-fake_wordcloud = WordCloud(width=800, height=400, background_color='white').generate(fake_title_words)
+Another important aspect of exploratory analysis is to examine whether simple structural features of the articles — such as the length of titles and body text — differ between fake and real news. To do this, we generated histograms that show the distribution of article title lengths and article text lengths for fake and true news.
 
-plt.figure(figsize=(10, 5))
-plt.imshow(fake_wordcloud, interpolation='bilinear')
-plt.axis('off')
-plt.title('Word Cloud for Fake News Titles')
-plt.show()
-```
+![Distribution of article title lengths for fake and true news articles](../img/title_length_dist.png){#fig-length-distributions width=75%}
 
-```{python}
-#| label: fig-true-wordcloud
-#| fig-cap: "Word cloud for titles of true news articles"
-#| fig-width: 7
-#| fig-height: 3.5
-#| echo: false
-# Generate word cloud for true news titles
-true_wordcloud = WordCloud(width=800, height=400, background_color='white').generate(true_title_words)
+![Distribution of article text lengths for fake and true news articles](../img/text_length_dist.png){#fig-text-length-distributions width=75%}
 
-plt.figure(figsize=(10, 5))
-plt.imshow(true_wordcloud, interpolation='bilinear')
-plt.axis('off')
-plt.title('Word Cloud for True News Titles')
-plt.show()
-```
+From @fig-length-distributions, we can see that the length of true news titles appears to have bell-shaped distribution, while the length of fake news titles is right-skewed. This suggests that if the title of a news article is particularly long, it may be more likely to be fake news. This strategy may be utilized to grab readers' attention with sensational or clickbait-style headlines.
+
+When comparing the body text lengths in @fig-text-length-distributions, we can see that both fake and true news articles have right-skewed distributions. Their distributions are quite similar, indicating that body text length may not be a strong indicator of whether an article is fake or true news.
+
+### Comparing the Percentage of Counts of Subjects between Fake and Real News Articles
+
+Another feature of our dataset is the subject of the news article. Here, we examine whether the suject matter of articles differs between fake and real news. In our dataset, each article is labeled as either *political* or *non‑political*. To compare distributions fairly, we calculated the percentage of articles in each subject category within the fake and true subsets of the training data and plotted the results.
+
+![Percentage of counts of news subjects in fake vs. true news articles](../img/subject_percentage_count.png){#fig-subject-counts width=75%}
+
+As shown in @fig-subject-counts, non-political news accounts for a larger portion of the fake news, while there is a larger percentage of political news in the true news. The difference of percentages exists but is not conspicuous, suggesting this engineered feature `subject` may still be useful in predicting whether news is true. Therefore, the feature `subject` (political vs non-political) is included in the classification model below.
 
 ## Classfication Modeling Analysis
 
 ## Dummy Classifier
 
-The dummy classifier acts as the baseline before building a more advanced model. The strategy used is "most_frequent" so that the dummy classifier always predicts the majority class. The goal later on is to build a classification model that does well compared to this dummy.
+Before evaluation our model, it is important to establish a baseline for comparison. The Dummy classifier acts as this baseline by applying a simple strategy to classify observations rather than learn from the data. In this case, our Dummy classifier always predicts the majority class, using the "most_frequent" strategy. The goal later on is to build a classification model that does well compared to this Dummy.
 
 ## Naive Bayes Classifier
 
-`MultinomialNB` is used as the estimator to deal with integer counts data, after proper preprocessing of the features. Two textual features (`title` and `text`) and a categorical feature `subject` with only two levels (political and non-political) are included in modelling. The `date` feature is dropped due to its irrelevance to the target. Genereally speaking, when the news is published is random information and has little to do with whether the news is fake or true.
+`MultinomialNB` is used as the estimator to deal with integer counts data, after proper preprocessing of the features. Two textual features (`title` and `text`) and a categorical feature `subject` with only two levels (*political* and *non-political*) are included in modelling. The `date` feature is dropped due to its irrelevance to the target. Genereally speaking, when the news is published is random information and has little to do with whether the news is fake or true.
 
 As a first step, the features should be preprocessed. One-Hot encoding is applied to the categorical feature `subject` with `drop="if_binary"` to include only one column for this binary feature. For the two textual features, `title` and `text`, they are first transformed by `lambda x: np.ravel(x)` to be one-dimensional arrays. After being flattened, they are then passed to `CountVectorizer` to extract the words and number of occurrences from these two features. Note that `CountVectorizer` needs to be created twice, one for each textual feature.
 
@@ -392,65 +140,35 @@ Before fitting the model to the training set, hyperparameter tuning is carried o
 
 Note that `RandomizedSearchCV` runs very slowly in this case. To reduce computation time, `n_iter` is set to only 10. Albeit doing only 10 searches, the best model found already performs very well, as we can see from the CV score and test scores below.
 
-
 # Results
 
 As a baseline, dummy classifier is first fitted to get the test accuracy.
 
 ```{python}
-dummy_clf = DummyClassifier(strategy="most_frequent")
-dummy_clf.fit(X_train, y_train)
+#| echo: false
+X_train = pd.read_csv("../data/processed/X_train.csv")
+y_train = pd.read_csv("../data/processed/y_train.csv")
+X_test = pd.read_csv("../data/processed/X_test.csv")
+y_test = pd.read_csv("../data/processed/y_test.csv")
+
+with open("../models/dummy_clf.pkl", "rb") as f:
+    dummy_clf = pickle.load(f)
 dummy_pred = dummy_clf.predict(X_test)
 dummy_accuracy = dummy_clf.score(X_test, y_test)
-print("Baseline (Dummy) Accuracy: {:.3f}".format(dummy_accuracy))
 ```
 
 Using most frequent dummy classifier, the test score is low (only `{python} f"{dummy_accuracy:.3f}"`) due to a relatively balanced dataset. Now compare the Naive Bayes model with the dummy classifier. 
 
 ```{python}
-# Create preprocessing pipeline
-title_feature = 'title'
-text_feature = 'text'
-categorical_feature = ['subject']
-drop_feature = ['date']
+#| echo: false
+def ravel_transform(x):
+    return np.ravel(x)
 
-title_pipe = make_pipeline(
-    FunctionTransformer(lambda x: np.ravel(x)), 
-    CountVectorizer()
-)
-text_pipe = make_pipeline(
-    FunctionTransformer(lambda x: np.ravel(x)), 
-    CountVectorizer()
-)
-
-preprocessor = ColumnTransformer(
-    [
-        ("one_hot", OneHotEncoder(drop="if_binary"), categorical_feature),
-        ("title_vectorizer", title_pipe, "title"),
-        ("text_vectorizer", text_pipe, "text"),
-        ("drop", "drop", drop_feature)
-    ]
-)
-
-pipe = make_pipeline(preprocessor, MultinomialNB())
-
-param_dist = {
-    "columntransformer__title_vectorizer__countvectorizer__max_features": randint(1, 200),
-    "columntransformer__text_vectorizer__countvectorizer__max_features": randint(1, 5000),
-    "multinomialnb__alpha": 10.0 ** np.arange(-7, 1)
-}
-
-random_search = RandomizedSearchCV(pipe, 
-                                   param_distributions=param_dist, 
-                                   n_iter=10, n_jobs=-1,
-                                   return_train_score=True,
-                                   random_state=123)
-
-random_search.fit(X_train, y_train)
-random_search.best_params_
-train_score = random_search.score(X_train, y_train)
-best_cv_score = random_search.best_score_
-test_score = random_search.score(X_test, y_test)
+with open("../models/naive_bayes.pkl", "rb") as f:
+    nb_model = pickle.load(f)
+train_score = nb_model.score(X_train, y_train)
+best_cv_score = nb_model.best_score_
+test_score = nb_model.score(X_test, y_test)
 ```
 
 After fitting the Naive Bayes model to the training set, the best hyperparameters and CV score can be extracted from the model. The best values of all 3 hyperparameters are in the middle of the search ranges instead of being on the edge, so the search ranges are specified appropriately. Under this model, the training score is `{python} f"{train_score:.3f}"`. The best CV score is `{python} f"{best_cv_score:.3f}"`, and the test score is `{python} f"{test_score:.3f}"`. Since the train, CV and test score are close to one another and are both high, underfitting or overfitting is not a concern here. Compared to dummy classifier, this Naive Bayes model performs a lot better in terms of prediction accuracy, increasing the test score from `{python} f"{dummy_accuracy:.3f}"` to `{python} f"{test_score:.3f}"`.
@@ -467,7 +185,7 @@ Below are the visualizations of the classification results on the test set, as a
 #| fig-cap: Confusion matrix for Naive Bayes classifier on test set
 
 ConfusionMatrixDisplay.from_estimator(
-    random_search,
+    nb_model,
     X_test,
     y_test,
     values_format="d"
@@ -479,12 +197,12 @@ ConfusionMatrixDisplay.from_estimator(
 
 print(
     classification_report(
-        y_test, random_search.predict(X_test)
+        y_test, nb_model.predict(X_test)
     )
 )
 ```
 
-The model classifies both true and fake news correctly most of the time, indicated by o a high true postive and true negative rate. Both false positve and false negative rates are low, since there are few misclassifications. Therefore, not only is the model accuracy high, but the model is also robust in correctly detecting both true and fake news, with few misclassifications.
+The model classifies both true and fake news correctly most of the time, indicated by a high true postive and true negative rate. Both false positve and false negative rates are low, since there are few misclassifications. Therefore, not only is the model accuracy high, but the model is also robust in correctly detecting both true and fake news, with few misclassifications.
 
 ```{python}
 #| echo: false
@@ -492,14 +210,14 @@ The model classifies both true and fake news correctly most of the time, indicat
 #| fig-cap: Precision-Recall curve for Naive Bayes classifier on test set
 
 PrecisionRecallDisplay.from_estimator(
-    random_search,
+    nb_model,
     X_test,
     y_test,
     pos_label='Fake',
     name='MultinomialNB'
 )
 
-prob_scores = random_search.predict_proba(X_test)[:, 1]
+prob_scores = nb_model.predict_proba(X_test)[:, 1]
 ap_score = average_precision_score(y_test, prob_scores, pos_label='True')
 ```
 
@@ -511,13 +229,13 @@ The AP score, as a summary of the PR curve, is `{python} f"{ap_score:.2f}"`. Tha
 #| fig-cap: ROC Curve for Naive Bayes classifier on test set
 
 RocCurveDisplay.from_estimator(
-    random_search,
+    nb_model,
     X_test,
     y_test,
     pos_label='Fake'
 )
 
-prob_scores = random_search.predict_proba(X_test)[:, 1]
+prob_scores = nb_model.predict_proba(X_test)[:, 1]
 auc_value = roc_auc_score(y_test, prob_scores)
 ```
 
@@ -525,27 +243,21 @@ The AUC here is `{python} f"{auc_value:.2f}"`, which is much higher than the bas
 
 # Discussion
 
-## Result summary
+## Results Summary
 
 The Naive Bayes model performs decently well due to high accuracy, high true positive rate, high true negative rate, low false postive rate, low false negative rate, high AP score and high AUC value. Apart from these exceptional evaluation metrics, this model also does not throw major concerns such as underfitting or overfitting problems. The training score (`{python} f"{train_score:.3f}"`), the best CV score (`{python} f"{best_cv_score:.3f}"`), and test score (`{python} f"{test_score:.3f}"`) are consistently high and close to one another, so there is no noticeable underfitting or overfitting issue. To summarize, compared to the baseline model (dummy classifier), this Naive Bayes model exhibits major improvements, returning satisfactory results.
 
-## Discuss whether this is what we expected to find
+Our findings are partly aligned with expectations. According to the nature of political news, it is expected that there is more political news under the fake news category. However, in this dataset, there is only 2% more political news in fake news compared to true news. This marginal difference is not expected. 
 
-Yes and No.
+Despite this, the Naive Bayes model generally yields high performance, even if it is simple. So, using `MultinomialNB` with hyperparameter tuning gives an expected high prediction performance. Moreover, the original counts of words are used instead of the binary information presence/absence, so there is no loss of information in modelling. Therefore, the satisfactory result is as expected.
 
-According to the nature of political news, it is expected that there are much more political news under the fake news category. However, in this dataset, there are only 2% more political news in fake news compared to true news. This marginal difference is not expected. 
+## Impact of these Findings
 
-However, Naive Bayes model generally yields high performance despite its simplicity. So, using `MultinomialNB` with hyperparameter tuning gives an expected high prediction performance. Moreover, the original counts of words are used instead of the binary information presence/absence, so there is no loss of information in modelling. Therefore, the satisfactory result is as expected.
-
-## Discuss the impacts of these findings
-
-This Naive Bayes model could potentially be deployed and used for news classification, which helps news readers identify fake news and avoid accepting false information. Secondly, this news classification model could also assist news agents screen and select only the true news to publish, avoiding losing reputation for articulating fake news. Lastly, this model could inspire further improvements of news classification models, acting as a good starting point for future model building.
-
-## Discuss what future questions could this lead to
+This Naive Bayes model could potentially be deployed and used for news classification, which may help news readers identify fake news and avoid accepting false information. Secondly, this news classification model could also assist news agents screen and select only the true news to publish, avoiding losing reputation for articulating fake news. Lastly, this model could inspire further improvements of news classification models, acting as a good starting point for future model building.
 
 Specific to this particular model, two future questions could be asked. First, the percentage of counts of political news is only marginally different between true and fake news. So, it is worth exploring whether dropping the `subject` feature will increase or decrease the model performance. This can be done by comparing the two models with and without the `subject` feature. Second, what other possible features can be used or engineered to further improve the model performance? This can be explored by asking for suggestions from human experts with domain knowledge. So far only the Naive Bayes model is used, which is a simple and naive model. Not restricted to this model anymore, there are other questions that can be raised. For example, are there any other more advanced models that can deal with integer count data and have more satisfying results?
 
-## Limitations of analysis
+## Limitations of Analysis
 
 All news are classified as political and non-political in the analysis, which is crude and leaves space for improvement. More detailed `subject` categories can be applied to improve model performance. Besides that, all the collected data we have do not cover all types of news in the world. The topics included in the dataset are rather quite limited. So, this model could do well when seeing similar news, but could fail when given a totally unfamiliar news topic. So enriching the training data is essential to deploy the model in the wild.
 

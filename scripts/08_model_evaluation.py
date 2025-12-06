@@ -24,7 +24,7 @@ from sklearn.metrics import ConfusionMatrixDisplay, PrecisionRecallDisplay, RocC
 
 # terminal command to run script:
 # python scripts/08_model_evaluation.py \
-#     --test_data_path=data/processed/test_data.csv
+#     --test_data_path=data/processed/test_data.csv \
 #     --model_path=models/naive_bayes.pkl
 
 def load_data(path):
