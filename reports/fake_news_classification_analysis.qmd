@@ -29,11 +29,11 @@ import pickle
 
 # Summary
 
-News is everywhere. In this digital era, there exists both true and fake news on the Internet, making it harder for readers and news agents to differentiate them. So, fake news detection is a technology with rising demands that helps defend information integrity. To solve this problem, applied machine learning is used for binary classification. The fitted Naive Bayes model with `MultinomialNB` as estimator and `title`, `text` and `subject` as features yields a test classification accuracy of 0.954, where the false positive and false negative rates are both low. The AP score and AUC value of the final model end up being 0.97 and 0.98 respectively, suggesting decent and satisfactory performance. Compared to the baseline dummy classifier, this Naive Bayes model classifies both true and fake news significantly better, which is reflected by consistently high and similar training, cross-validation and test scores. This machine learning model gives us confidence in its decent performance, which can potentially be deployed and used in the reality. But limitations do exist, since the collected data do not cover all possible types of news. So, when deployed in the wild, the model might perform badly in news of other realms, such as entertainment news. If more comprehensive data can be collected, then this model might handle more cases accurately.
+News is everywhere. In this digital era, there exists both true and fake news on the Internet, making it harder for readers and news agents to differentiate them. This makes fake news detection a technology with rising demands to help defend information integrity. To solve this problem, applied machine learning is used for binary classification. The fitted Naive Bayes model with `MultinomialNB` as estimator and `title`, `text` and `subject` as features yields a test classification accuracy of 0.954, where the false positive and false negative rates are both low. The AP score and AUC value of the final model end up being 0.97 and 0.98 respectively, suggesting decent and satisfactory performance. Compared to the baseline dummy classifier, this Naive Bayes model classifies both true and fake news significantly better, which is reflected by consistently high and similar training, cross-validation and test scores. This machine learning model gives us confidence in its performance, which points to its potential to be deployed and used in the real world. Despite this, it does have limitations since the training data does not cover all possible types of news. When deployed in the wild, the model might perform badly in news of other realms, such as entertainment news. If more comprehensive data can be collected, then this model might handle various cases more accurately.
 
 # Introduction
 
-"Fake news", also known as disinformation, is deliberately misleading or false information presented as legitimate news [@servicecanada2024]. Its rapid spread in recent years has becoming a pressing concern, particularly with the rise of social media platforms that accelerate the dissemination of content. These platforms are designed with the primary objective of capturing and retaining user attention for as long as possible. To that end, fake news often exploits this design to gain traction.
+"Fake news", also known as disinformation, is deliberately misleading or false information presented as legitimate news [@servicecanada2024]. Its rapid spread in recent years has become a pressing concern, particularly with the rise of social media platforms that accelerate the dissemination of content. These platforms are designed with the primary objective of capturing and retaining user attention for as long as possible [@pennycook2021]. To that end, fake news often exploits this design to gain traction.
 
 There is high public awareness of this issue in Canada. In 2023, Statistics Canada reported that 59% of Canadians admitted that they were "very or extremely concerned about online misinformation" in the Survey Series on People and their Communities [@bilodeau2024]. In the United States, the concept of "fake news" grew in popularity during the 2016 presidential election. @allcott2017 estimated that false news stories were shared on Facebook at least 38 million times in the 3 months leading up to the election. Such widespread circulation of this false information can have serious consequences, including influencing public opinion and undermining trust in legitimate news sources. Thus, methods for detecting fake news may be beneficial in mitigating its spread.
 
@@ -41,7 +41,7 @@ This report investigates whether a machine learning model can accurately classif
 
 # Data
 
-The dataset used in this analysis is the "Fake and Real News Dataset" available on Kaggle [@bisaillon2020]. It contains approximately 40,000 news articles published in the United States between 2015 and 2018. Each row in the dataset represents a news article, with a column for its title, subject, date, and body text.
+The dataset used in this analysis is the "Fake and Real News Dataset" available on Kaggle [@bisaillon2023]. It contains approximately 40,000 news articles published in the United States between 2015 and 2018. Each row in the dataset represents a news article, with a column for its title, subject, date, and body text.
 
 ## Data Cleaning and Transforming
 
@@ -66,7 +66,7 @@ To begin our exploratory analysis of the training data, we generated a concise s
 ```{python}
 #| echo: false
 #| label: fig-train-info
-#| fig-cap: Summarised information on training data set
+#| fig-cap: "Summarised information on training data set"
 train_df.info()
 ```
 
