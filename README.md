@@ -4,13 +4,13 @@
 
 This project implements a machine learning solution to classify news articles as real or fake using Naive Bayes classification techniques. With the increasing prevalence of misinformation in digital media, this tool aims to help identify potentially false news articles through statistical analysis.
 
-![Word Cloud Analysis](img/readme_1.png)
+![Word Cloud Analysis](img/fake_text_word_cloud.png)
 
-![Word Cloud Analysis](img/readme_2.png)
+![Word Cloud Analysis](img/fake_title_word_cloud.png)
 
-![Word Cloud Analysis](img/readme_3.png)
+![Word Cloud Analysis](img/true_text_word_cloud.png)
 
-![Word Cloud Analysis](img/readme_4.png)
+![Word Cloud Analysis](img/fake_title_word_cloud.png)
 
 ## Getting Started
 
