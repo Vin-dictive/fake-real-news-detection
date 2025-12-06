@@ -33,7 +33,7 @@ News is everywhere. In this digital era, there exists both true and fake news on
 
 # Introduction
 
-"Fake news", also known as disinformation, is deliberately misleading or false information presented as legitimate news [@servicecanada2024]. Its rapid spread in recent years has become a pressing concern, particularly with the rise of social media platforms that accelerate the dissemination of content. These platforms are designed with the primary objective of capturing and retaining user attention for as long as possible [@pennycook2021]. To that end, fake news often exploits this design to gain traction.
+"Fake news", also known as disinformation, is deliberately misleading or false information presented as legitimate news [@servicecanada2024]. Its rapid spread in recent years has become a pressing concern, particularly with the rise of social media platforms that accelerate the dissemination of content. These platforms are designed with the primary objective of capturing and retaining user attention for as long as possible [@pen]. To that end, fake news often exploits this design to gain traction.
 
 There is high public awareness of this issue in Canada. In 2023, Statistics Canada reported that 59% of Canadians admitted that they were "very or extremely concerned about online misinformation" in the Survey Series on People and their Communities [@bilodeau2024]. In the United States, the concept of "fake news" grew in popularity during the 2016 presidential election. @allcott2017 estimated that false news stories were shared on Facebook at least 38 million times in the 3 months leading up to the election. Such widespread circulation of this false information can have serious consequences, including influencing public opinion and undermining trust in legitimate news sources. Thus, methods for detecting fake news may be beneficial in mitigating its spread.
 
@@ -102,7 +102,7 @@ We can see that "Trump" appears frequently in both fake and true news titles, wh
 
 The most commonly used words in the body text of fake news articles include "Trump", "said", and "one". The most frequent words in true news articles are "Trump", "said", and "United State". Given that there is more overlap in the common words used in the body text of fake and true news articles compared to the titles, the titles may provide more distinctive features for classification.
 
-### Comparing title and text length between fake and real news articles
+### Comparing Title and Text Length between Fake and Real News Articles
 
 Another important aspect of exploratory analysis is to examine whether simple structural features of the articles — such as the length of titles and body text — differ between fake and real news. To do this, we generated histograms that show the distribution of article title lengths and article text lengths for fake and true news.
 
@@ -114,7 +114,7 @@ From @fig-length-distributions, we can see that the length of true news titles a
 
 When comparing the body text lengths in @fig-text-length-distributions, we can see that both fake and true news articles have right-skewed distributions. Their distributions are quite similar, indicating that body text length may not be a strong indicator of whether an article is fake or true news.
 
-### Comparing the percentage of counts of subjects between fake and real news articles
+### Comparing the Percentage of Counts of Subjects between Fake and Real News Articles
 
 Another feature of our dataset is the subject of the news article. Here, we examine whether the suject matter of articles differs between fake and real news. In our dataset, each article is labeled as either *political* or *non‑political*. To compare distributions fairly, we calculated the percentage of articles in each subject category within the fake and true subsets of the training data and plotted the results.
 
@@ -139,7 +139,6 @@ Next, a machine learning pipeline `pipe` is created, with preprocessing and the 
 Before fitting the model to the training set, hyperparameter tuning is carried out to boost classification performance. There are 3 hyperparameters being considered: `max_feautres` of the two `CountVectorizer`s, and `alpha` of `MultinomialNB`. The distributions of these hyperparameters to search from are specified below, followed by `RandomizedSearchCV` to do random search and cross validation. 
 
 Note that `RandomizedSearchCV` runs very slowly in this case. To reduce computation time, `n_iter` is set to only 10. Albeit doing only 10 searches, the best model found already performs very well, as we can see from the CV score and test scores below.
-
 
 # Results
 
