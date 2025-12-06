@@ -10,16 +10,23 @@ from pathlib import Path
 
 
 def download_csv(url, write_to):
-    """Download CSV file from URL to specified directory."""
+    """
+    Download CSV file from URL to specified directory.
+
+    Parameters
+    ----------
+    url : str
+        URL of the CSV file to download.
+    write_to : str
+        Directory path where the CSV file will be saved.
+    """
     response = requests.get(url)
     response.raise_for_status()
     
-    # Extract filename from URL or use default
     filename = url.split('/')[-1]
     if not filename.endswith('.csv'):
         filename = 'data.csv'
     
-    # Write CSV file
     csv_path = os.path.join(write_to, filename)
     with open(csv_path, 'wb') as f:
         f.write(response.content)
@@ -29,8 +36,16 @@ def download_csv(url, write_to):
 @click.option('--url', type=str, help="URL of dataset to be downloaded")
 @click.option('--write_to', type=str, help="Path to directory where raw data will be written to")
 def main(url, write_to):
-    """Downloads CSV data from the web to a local filepath."""
-    # Create directory if it doesn't exist
+    """
+    Main function to download CSV data from the web to a local filepath.
+
+    Parameters
+    ----------
+    url : str
+        URL of the CSV dataset to be downloaded.
+    write_to : str
+        Path to directory where the downloaded data will be written.
+    """
     Path(write_to).mkdir(parents=True, exist_ok=True)
     
     try:
