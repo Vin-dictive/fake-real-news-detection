@@ -7,6 +7,9 @@ import os
 import pandas as pd
 import numpy as np
 import pickle
+import threading
+import time
+import sys
 from sklearn.dummy import DummyClassifier
 from sklearn.feature_extraction.text import CountVectorizer
 from sklearn.model_selection import(
@@ -31,6 +34,15 @@ def load_data(path):
 
 def ravel_transform(x):
     return np.ravel(x)
+
+def progress_indicator(stop_event):
+    chars = "|/-\\"
+    i = 0
+    while not stop_event.is_set():
+        sys.stdout.write(f"\rFitting model... {chars[i % len(chars)]}")
+        sys.stdout.flush()
+        time.sleep(0.1)
+        i += 1
 
 @click.command()
 @click.option('--train_data_path', type=str, required=True, help="Path to training data CSV")
@@ -90,7 +102,16 @@ def main(train_data_path, test_data_path):
                                            n_iter=10, n_jobs=-1,
                                            return_train_score=True,
                                            random_state=123)
-        random_search.fit(X_train, y_train) 
+        
+        stop_event = threading.Event()
+        progress_thread = threading.Thread(target=progress_indicator, args=(stop_event,))
+        progress_thread.start()
+        
+        random_search.fit(X_train, y_train)
+        
+        stop_event.set()
+        progress_thread.join()
+        print("\rModel fitting completed!" + " " * 20) 
 
         # save Naive Bayes model
         NB_path = "models/naive_bayes.pkl"
