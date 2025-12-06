@@ -27,6 +27,34 @@ cd fake-real-news-detection
 
 - **Jupyter** - Interactive notebook environment
 
+## Dependencies
+
+This project requires the following main dependencies:
+
+- **Python 3.11**
+- **Data Science Libraries:**
+  - pandas 2.3.3
+  - numpy 2.3.5
+  - scipy 1.16.3
+  - scikit-learn 1.7.2
+- **Visualization:**
+  - matplotlib 3.10.8
+  - wordcloud 1.9.4
+- **Development Tools:**
+  - jupyter
+  - notebook 7.5.0
+  - ipykernel 7.1.0
+- **Data Validation:**
+  - pandera 0.27.0
+- **Utilities:**
+  - click 8.3.1
+  - requests 2.32.5
+  - tabulate 0.9.0
+  - quarto-cli
+  - conda-lock
+
+All dependencies are specified in `environment.yml` for conda or `conda-lock.yml` for reproducible builds.
+
 ### Environment Setup
 
 #### Option 1: If you have conda-lock installed, use conda-lock (Recommended)
