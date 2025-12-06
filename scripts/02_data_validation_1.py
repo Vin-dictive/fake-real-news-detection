@@ -12,16 +12,37 @@ import pandera.pandas as pa
     # --processed_data_path=data/processed/complete_data.csv
     
 def load_data(path):
+    """
+    Load data from a CSV file into a pandas DataFrame.
+
+    Parameters
+    ----------
+    path : str
+        Path to the CSV file.
+
+    Returns
+    -------
+    pd.DataFrame
+        DataFrame containing the loaded data.
+    """
     return pd.read_csv(path)
 
 def build_schema():
-    # Create a data validation schema that checks for:
-        # Correct column names
-        # No empty observations
-        # Missingness not beyond expected threshold
-        # Correct data types in each column
-        # No duplicate observations
-        
+    """
+    Build a Pandera schema for validating the processed dataset.
+
+    The schema checks for:
+    - Correct column names
+    - No empty observations
+    - Missingness not beyond expected threshold
+    - Correct data types in each column
+    - No duplicate observations
+
+    Returns
+    -------
+    pa.DataFrameSchema
+        Pandera schema object for validating the dataset.
+    """
     schema = pa.DataFrameSchema(
         {
             "title": pa.Column(str),
@@ -41,12 +62,39 @@ def build_schema():
     return schema
 
 def validate_data(processed_data, schema):
+    """
+    Validate the processed dataset against the provided schema.
+
+    Parameters
+    ----------
+    processed_data : pd.DataFrame
+        The dataset to validate.
+    schema : pa.DataFrameSchema
+        The Pandera schema used for validation.
+
+    Raises
+    ------
+    pa.errors.SchemaErrors
+        If the dataset fails validation checks.
+    """
     schema.validate(processed_data, lazy=True)
 
 @click.command()
 @click.option('--processed_data_path', type=str, help="Path to processed data")
 
 def main(processed_data_path):
+    """
+    Main function to perform data validation and save the cleaned dataset.
+    - Load the processed dataset from the given path.
+    - Drop duplicate rows.
+    - Build and apply the validation schema.
+    - Save the validated dataset back to 'data/processed/complete_data.csv'.
+
+    Parameters
+    ----------
+    processed_data_path : str
+        Path to the processed dataset CSV file.
+    """
     try:
         processed_data = load_data(processed_data_path)
         processed_data = processed_data.drop_duplicates()

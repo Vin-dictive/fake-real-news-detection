@@ -12,9 +12,36 @@ from sklearn.model_selection import train_test_split
     # --data_path=data/processed/complete_data.csv
   
 def load_data(path):
+    """
+    Load a dataset from a CSV file.
+
+    Parameters
+    ----------
+    path : str
+        Path to the CSV file containing the dataset.
+
+    Returns
+    -------
+    pd.DataFrame
+        DataFrame containing the loaded dataset.
+    """
     return pd.read_csv(path)
 
 def data_splitting(complete_data):
+    """
+    Split the complete dataset into training (80%) and testing (20%) sets.
+
+    Parameters
+    ----------
+    complete_data : pd.DataFrame
+        The full dataset to be split.
+
+    Returns
+    -------
+    tuple of (pd.DataFrame, pd.DataFrame)
+        - train_df: DataFrame containing the training data.
+        - test_df: DataFrame containing the testing data.
+    """
     # Split into train/test data sets
     train_df, test_df = train_test_split(
         complete_data, train_size=0.80, random_state=123
@@ -25,7 +52,17 @@ def data_splitting(complete_data):
 @click.option('--data_path', type=str, help="Path to data to split")
 
 def main(data_path):
-    
+    """
+    Main function to perform dataset splitting.
+    - Load the complete dataset from the provided path.
+    - Split the dataset into training (80%) and testing (20%) sets.
+    - Save the resulting datasets as CSV files in the 'data/processed' folder.
+
+    Parameters
+    ----------
+    data_path : str
+        Path to the complete dataset CSV file.
+    """
     # load data and split into train/test data sets
     try:
         complete_data = load_data(data_path)

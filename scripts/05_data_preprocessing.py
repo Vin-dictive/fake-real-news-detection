@@ -20,12 +20,35 @@ import pandas as pd
 #     --test_data_path=data/processed/test_data.csv
 
 def load_data(path):
+    """
+    Load a dataset from a CSV file.
+
+    Parameters
+    ----------
+    path : str
+        Path to the CSV file containing the dataset.
+
+    Returns
+    -------
+    pd.DataFrame
+        DataFrame containing the loaded dataset.
+    """
     return pd.read_csv(path)
 
 @click.command()
 @click.option('--train_data_path', type=str, required=True, help="Path to training data CSV")
 @click.option('--test_data_path', type=str, required=True, help="Path to testing data CSV")
 def main(train_data_path, test_data_path):
+    """
+    Main function to preprocess training and testing datasets.
+
+    Parameters
+    ----------
+    train_data_path : str
+        Path to the training dataset CSV file.
+    test_data_path : str
+        Path to the testing dataset CSV file.
+    """
     try:
         # Load train and test datasets
         train_df = load_data(train_data_path)

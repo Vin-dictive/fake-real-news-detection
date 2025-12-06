@@ -9,12 +9,38 @@ import pandera.pandas as pa
 
 # terminal command to run script: 
 # python scripts/04_data_validation_2.py \
-    # --train_data_path=data/processed/train_data.csv
+#   --train_data_path=data/processed/train_data.csv
     
 def load_data(path):
+    """
+    Load a dataset from a CSV file.
+
+    Parameters
+    ----------
+    path : str
+        Path to the CSV file containing the dataset.
+
+    Returns
+    -------
+    pd.DataFrame
+        DataFrame containing the loaded dataset.
+    """
     return pd.read_csv(path)
 
 def filter_valid_rows(train_data):
+    """
+    Filter out invalid rows from the training dataset.
+
+    Parameters
+    ----------
+    train_data : pd.DataFrame
+        The training dataset.
+
+    Returns
+    -------
+    pd.DataFrame
+        Filtered dataset containing only valid rows.
+    """
     train_data = train_data[train_data['text'].str.len() >= 20]
     train_data = train_data[pd.to_datetime(train_data['date'], 
                                    format='mixed', 
@@ -22,10 +48,18 @@ def filter_valid_rows(train_data):
     return train_data
 
 def build_schema2():
-    # Perform the following data validation checks train data:
-    #   No outlier or anomalous values
-    #   Correct category levels (i.e., no string mismatches or single values)
-        
+    """
+    Build a Pandera schema for validating training data content.
+
+    Checks performed:
+    - No outlier or anomalous values
+    - Correct category levels (i.e., no string mismatches or single values)
+
+    Returns
+    -------
+    pa.DataFrameSchema
+        Pandera schema object for validating training data.
+    """ 
     schema2 = pa.DataFrameSchema(
         {
             "title": pa.Column(
@@ -60,13 +94,38 @@ def build_schema2():
     )
     return schema2
     
-# check target/response variable follows expected distribution:
 def expected_target_distribution(df):
+    """
+    Check that the target variable follows the expected distribution.
+
+    Ensures that neither class ('True' or 'Fake') exceeds 80% of the dataset.
+
+    Parameters
+    ----------
+    df : pd.DataFrame
+        Training dataset.
+
+    Returns
+    -------
+    bool
+        True if distribution is valid, False otherwise.
+    """
     return (df['target'].value_counts(normalize=True) < 0.8).all()
 
 def normal_corr_target_features(df):
-    # check no anomalous correlations between target/response variable 
-    # and features/explanatory variables
+    """
+    Check for anomalous correlations between target and features.
+
+    Parameters
+    ----------
+    df : pd.DataFrame
+        Training dataset.
+
+    Returns
+    -------
+    bool
+        True if correlations are within acceptable range, False otherwise.
+    """
     target = df['target'].map({
         "True": 1,
         "Fake": 0
@@ -86,8 +145,20 @@ def normal_corr_target_features(df):
 
     return True
 
-# check no anomalous correlations between features/explanatory variables
 def normal_corr_between_features(df):
+    """
+    Check for anomalous correlations between explanatory features.
+
+    Parameters
+    ----------
+    df : pd.DataFrame
+        Training dataset.
+
+    Returns
+    -------
+    bool
+        True if correlations are within acceptable range, False otherwise.
+    """
     title_length = df['title'].str.len()
     text_length = df['text'].str.len()
     numeric_subject = df['subject'].map({
@@ -106,10 +177,19 @@ def normal_corr_between_features(df):
     return True
 
 def build_schema3():
-    # Perform the following data validation checks on training data:
-    #   Target/response variable follows expected distribution
-    #   No anomalous correlations between target/response variable and features/explanatory variables
-    #   No anomalous correlations between features/explanatory variables
+    """
+    Build a Pandera schema for validating dataset-level properties.
+
+    Checks performed:
+    - Target variable follows expected distribution.
+    - No anomalous correlations between target/response variable and features/explanatory variables.
+    - No anomalous correlations between features/explanatory variables.
+
+    Returns
+    -------
+    pa.DataFrameSchema
+        Pandera schema object for validating dataset-level properties.
+    """
     schema3 = pa.DataFrameSchema(
         checks=[
             pa.Check(expected_target_distribution,
@@ -124,12 +204,44 @@ def build_schema3():
 
 
 def validate_data(train_data, schema):
+    """
+    Validate the training dataset against the provided schema.
+
+    Parameters
+    ----------
+    train_data : pd.DataFrame
+        The dataset to validate.
+    schema : pa.DataFrameSchema
+        Pandera schema used for validation.
+
+    Raises
+    ------
+    pa.errors.SchemaErrors
+        If the dataset fails validation checks.
+    """
     schema.validate(train_data, lazy=True)
 
 @click.command()
 @click.option('--train_data_path', type=str, help="Path to training data")
 
 def main(train_data_path):
+    """
+    Main function to validate and save the training dataset.
+
+    Parameters
+    ----------
+    train_data_path : str
+        Path to the training dataset CSV file.
+
+    Raises
+    ------
+    FileNotFoundError
+        If the specified training dataset file does not exist.
+    pa.errors.SchemaErrors
+        If the dataset fails validation checks.
+    Exception
+        For any other unexpected errors during validation or saving.
+    """
     try:
         train_data = load_data(train_data_path)
         schema2 = build_schema2()

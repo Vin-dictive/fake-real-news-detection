@@ -12,12 +12,43 @@ import pandas as pd
     # --raw_fake_data=data/raw/Fake.csv
 
 def read_data(raw_data):
+    """
+    Load raw data from a CSV file into a pandas DataFrame.
+
+    Parameters
+    ----------
+    raw_data : str
+        Path to the raw CSV file.
+
+    Returns
+    -------
+    pd.DataFrame
+        DataFrame containing the loaded raw data.
+    """
     # Load the raw data from the .csv files
     data_df = pd.read_csv(raw_data)
     return data_df
 
 def transform_data(true_df, fake_df):
-    
+    """
+    Clean and transform the raw true and fake news DataFrames.
+
+    - Adds a 'target' column to distinguish True vs. Fake articles.
+    - Standardizes the 'subject' column into two categories: 'political' or 'non-political'.
+    - Concatenates the two DataFrames into one complete dataset.
+
+    Parameters
+    ----------
+    true_df : pd.DataFrame
+        DataFrame containing true news articles.
+    fake_df : pd.DataFrame
+        DataFrame containing fake news articles.
+
+    Returns
+    -------
+    pd.DataFrame
+        Combined and transformed DataFrame.
+    """    
     # Create new 'target' columns true_df and fake_df
     true_df['target'] = 'True'
     fake_df['target'] = 'Fake'
@@ -41,7 +72,20 @@ def transform_data(true_df, fake_df):
 @click.option('--raw_true_data', type=str, help="Path to raw true data")
 @click.option('--raw_fake_data', type=str, help="Path to raw fake data")
 def main(raw_true_data, raw_fake_data):
-    
+    """
+    Main function to perform data cleaning and transformation.
+
+    - Loads raw true and fake datasets.
+    - Transforms and combines them into a single dataset.
+    - Saves the processed dataset as a CSV file in the 'data/processed' folder.
+
+    Parameters
+    ----------
+    raw_true_data : str
+        Path to the raw true news CSV file.
+    raw_fake_data : str
+        Path to the raw fake news CSV file.
+    """
     # Load the raw true and fake data from the .csv files
     true_df = read_data(raw_true_data)
     fake_df = read_data(raw_fake_data)
