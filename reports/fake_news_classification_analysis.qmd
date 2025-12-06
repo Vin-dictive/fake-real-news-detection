@@ -179,7 +179,7 @@ The Naive Bayes model demonstrates strong performance in distinguishing between 
 
 Below are the visualizations of the classification results on the test set, as a model performance assessment.
 
-![Confusion matrix for Naive Bayes classifier on test set](../img/confusion_matrix.png){#fig-confusion-matrix width=75%}
+![Confusion matrix for Naive Bayes classifier on test set](../img/confusion_matrix.png){#fig-confusion-matrix width=60%}
 
 ```{python}
 #| echo: false
@@ -192,7 +192,7 @@ print(
 
 The model classifies both true and fake news correctly most of the time, indicated by a high true postive and true negative rate. Both false positve and false negative rates are low, since there are few misclassifications. Therefore, not only is the model accuracy high, but the model is also robust in correctly detecting both true and fake news, with few misclassifications.
 
-![Precision-Recall curve for Naive Bayes classifier on test set](../img/pr_curve.png){#fig-pr-curve=75%}
+![Precision-Recall curve for Naive Bayes classifier on test set](../img/pr_curve.png){#fig-pr-curve width=60%}
 
 ```{python}
 #| echo: false
@@ -202,7 +202,7 @@ ap_score = average_precision_score(y_test, prob_scores, pos_label='True')
 
 The AP score, as a summary of the PR curve, is `{python} f"{ap_score:.2f}"`. That fact that the AP score is very close to 1 suggests that our Naive Bayes model's performance is excellent.
 
-![ROC Curve for Naive Bayes classifier on test set](../img/roc_curve.png){#fig-roc-curve=75%}
+![ROC Curve for Naive Bayes classifier on test set](../img/roc_curve.png){#fig-roc-curve width=60%}
 
 ```{python}
 #| echo: false
