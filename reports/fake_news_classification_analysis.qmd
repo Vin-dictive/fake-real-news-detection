@@ -17,8 +17,6 @@ bibliography: references.bib
 editor: source
 ---
 
-**Note**: The model fitting code runs up to 5 minutes.
-
 ```{python}
 #| echo: false
 import numpy as np
@@ -29,11 +27,13 @@ import pickle
 
 # Summary
 
-News is everywhere. In this digital era, there exists both true and fake news on the Internet, making it harder for readers and news agents to differentiate them. This makes fake news detection a technology with rising demands to help defend information integrity. To solve this problem, applied machine learning is used for binary classification. The fitted Naive Bayes model with `MultinomialNB` as estimator and `title`, `text` and `subject` as features yields a test classification accuracy of 0.954, where the false positive and false negative rates are both low. The AP score and AUC value of the final model end up being 0.97 and 0.98 respectively, suggesting decent and satisfactory performance. Compared to the baseline dummy classifier, this Naive Bayes model classifies both true and fake news significantly better, which is reflected by consistently high and similar training, cross-validation and test scores. This machine learning model gives us confidence in its performance, which points to its potential to be deployed and used in the real world. Despite this, it does have limitations since the training data does not cover all possible types of news. When deployed in the wild, the model might perform badly in news of other realms, such as entertainment news. If more comprehensive data can be collected, then this model might handle various cases more accurately.
+News is everywhere. In this digital era, there exists both true and fake news on the Internet, making it harder for readers and news agents to differentiate them. This makes fake news detection a technology with rising demands to help defend information integrity. To solve this problem, applied machine learning is used for binary classification. The fitted Naive Bayes model with `MultinomialNB` as estimator and `title`, `text` and `subject` as features yields a test classification accuracy of 0.954, where the false positive and false negative rates are both low. The AP score and AUC value of the final model end up being 0.97 and 0.98 respectively, suggesting decent and satisfactory performance. Compared to the baseline dummy classifier, this Naive Bayes model classifies both true and fake news significantly better, which is reflected by consistently high and similar training, cross-validation and test scores.
+
+This machine learning model shows good performance, which highlights its potential to be deployed and used in the real world. Despite this, it does have limitations since the training data does not cover all possible types of news. When deployed in the wild, the model might perform badly in news of other realms, such as entertainment news. If more comprehensive data can be collected, then this model might handle various cases more accurately.
 
 # Introduction
 
-"Fake news", also known as disinformation, is deliberately misleading or false information presented as legitimate news [@servicecanada2024]. Its rapid spread in recent years has become a pressing concern, particularly with the rise of social media platforms that accelerate the dissemination of content. These platforms are designed with the primary objective of capturing and retaining user attention for as long as possible [@pen]. To that end, fake news often exploits this design to gain traction.
+"Fake news", also known as disinformation, is deliberately misleading or false information presented as legitimate news [@servicecanada2024]. Its rapid spread in recent years has become a pressing concern, particularly with the rise of social media platforms that accelerate the dissemination of content. These platforms are designed with the primary objective of capturing and retaining user attention for as long as possible [@pennycook2021]. To that end, fake news often exploits this design to gain traction.
 
 There is high public awareness of this issue in Canada. In 2023, Statistics Canada reported that 59% of Canadians admitted that they were "very or extremely concerned about online misinformation" in the Survey Series on People and their Communities [@bilodeau2024]. In the United States, the concept of "fake news" grew in popularity during the 2016 presidential election. @allcott2017 estimated that false news stories were shared on Facebook at least 38 million times in the 3 months leading up to the election. Such widespread circulation of this false information can have serious consequences, including influencing public opinion and undermining trust in legitimate news sources. Thus, methods for detecting fake news may be beneficial in mitigating its spread.
 
@@ -65,12 +65,10 @@ To begin our exploratory analysis of the training data, we generated a concise s
 
 ```{python}
 #| echo: false
-#| label: fig-train-info
-#| fig-cap: "Summarised information on training data set"
-train_df.info()
+print(train_df.info())
 ```
 
-From @fig-train-info, we see that the training data contains `{python} len(train_df)` observations. Each observation represents a news article with a title, text, subject, date and target label. Notably, we also see that there are no missing values in our training data set which means we can proceed without any imputation or row removal. 
+From this summary, we see that the training data contains `{python} len(train_df)` observations. Each observation represents a news article with a title, text, subject, date and target label. Notably, we also see that there are no missing values in our training data set which means we can proceed without any imputation or row removal. 
 
 ### Count of Fake vs. Real News Articles
 
@@ -90,11 +88,11 @@ Before generating the word clouds, we cleaned the text by removing punctuation a
 
 ![Word cloud for titles of true news articles](../img/true_title_word_cloud.png){#fig-true-wordcloud width=60%}
 
-### Word Clouds for Text Column
-
 The most prominent words in the fake news titles include "VIDEO", "Trump" and "Obama". The most common words in the true news titles include "Trump", "US" and "White House".
 
 We can see that "Trump" appears frequently in both fake and true news titles, which means that it may not give much discriminatory power when classifying articles. However, words like "VIDEO", that appear much more frequently in fake news titles, may help the model identify fake news articles.
+
+### Word Clouds for Text Column
 
 ![Word cloud for text of fake news articles](../img/fake_text_word_cloud.png){#fig-fake-text-wordcloud width=60%}
 
@@ -104,7 +102,7 @@ The most commonly used words in the body text of fake news articles include "Tru
 
 ### Comparing Title and Text Length between Fake and Real News Articles
 
-Another important aspect of exploratory analysis is to examine whether simple structural features of the articles — such as the length of titles and body text — differ between fake and real news. To do this, we generated histograms that show the distribution of article title lengths and article text lengths for fake and true news.
+Another important aspect of exploratory analysis is to examine whether simple structural features of the articles, such as the length of titles and body text, differ between fake and real news. To do this, we generated histograms that show the distribution of article title lengths and article text lengths for fake and true news.
 
 ![Distribution of article title lengths for fake and true news articles](../img/title_length_dist.png){#fig-length-distributions width=75%}
 
@@ -124,19 +122,21 @@ As shown in @fig-subject-counts, non-political news accounts for a larger portio
 
 ## Classfication Modeling Analysis
 
-## Dummy Classifier
+### Dummy Classifier
 
 Before evaluation our model, it is important to establish a baseline for comparison. The Dummy classifier acts as this baseline by applying a simple strategy to classify observations rather than learn from the data. In this case, our Dummy classifier always predicts the majority class, using the "most_frequent" strategy. The goal later on is to build a classification model that does well compared to this Dummy.
 
-## Naive Bayes Classifier
+### Naive Bayes Classifier
 
 `MultinomialNB` is used as the estimator to deal with integer counts data, after proper preprocessing of the features. Two textual features (`title` and `text`) and a categorical feature `subject` with only two levels (*political* and *non-political*) are included in modelling. The `date` feature is dropped due to its irrelevance to the target. Genereally speaking, when the news is published is random information and has little to do with whether the news is fake or true.
 
 As a first step, the features should be preprocessed. One-Hot encoding is applied to the categorical feature `subject` with `drop="if_binary"` to include only one column for this binary feature. For the two textual features, `title` and `text`, they are first transformed by `lambda x: np.ravel(x)` to be one-dimensional arrays. After being flattened, they are then passed to `CountVectorizer` to extract the words and number of occurrences from these two features. Note that `CountVectorizer` needs to be created twice, one for each textual feature.
 
-Next, a machine learning pipeline `pipe` is created, with preprocessing and the Naive Bayes estimator.
-
-Before fitting the model to the training set, hyperparameter tuning is carried out to boost classification performance. There are 3 hyperparameters being considered: `max_feautres` of the two `CountVectorizer`s, and `alpha` of `MultinomialNB`. The distributions of these hyperparameters to search from are specified below, followed by `RandomizedSearchCV` to do random search and cross validation. 
+Next, a machine learning pipeline `pipe` is created, with preprocessing and the Naive Bayes estimator. Before fitting the model to the training set, hyperparameter tuning is carried out to boost classification performance. There are 3 hyperparameters being considered: 
+- `max_features` for the title `CountVectorizer` (randomly sampled from 1-200)
+- `max_features` for the text `CountVectorizer` (randomly sampled from 1-5000),
+- `alpha` of `MultinomialNB` (randomly sampled from $10^{-7}$-$10^0$).
+Randomized search with cross-validation selects the best combination of these parameters.
 
 Note that `RandomizedSearchCV` runs very slowly in this case. To reduce computation time, `n_iter` is set to only 10. Albeit doing only 10 searches, the best model found already performs very well, as we can see from the CV score and test scores below.
 
@@ -179,22 +179,10 @@ The Naive Bayes model demonstrates strong performance in distinguishing between 
 
 Below are the visualizations of the classification results on the test set, as a model performance assessment.
 
-```{python}
-#| echo: false
-#| label: fig-confusion-matrix
-#| fig-cap: Confusion matrix for Naive Bayes classifier on test set
-
-ConfusionMatrixDisplay.from_estimator(
-    nb_model,
-    X_test,
-    y_test,
-    values_format="d"
-)
-```
+![Confusion matrix for Naive Bayes classifier on test set](../img/confusion_matrix.png){#fig-confusion-matrix width=75%}
 
 ```{python}
 #| echo: false
-
 print(
     classification_report(
         y_test, nb_model.predict(X_test)
@@ -204,37 +192,20 @@ print(
 
 The model classifies both true and fake news correctly most of the time, indicated by a high true postive and true negative rate. Both false positve and false negative rates are low, since there are few misclassifications. Therefore, not only is the model accuracy high, but the model is also robust in correctly detecting both true and fake news, with few misclassifications.
 
+![Precision-Recall curve for Naive Bayes classifier on test set](../img/pr_curve.png){#fig-pr-curve=75%}
+
 ```{python}
 #| echo: false
-#| label: fig-pr-curve
-#| fig-cap: Precision-Recall curve for Naive Bayes classifier on test set
-
-PrecisionRecallDisplay.from_estimator(
-    nb_model,
-    X_test,
-    y_test,
-    pos_label='Fake',
-    name='MultinomialNB'
-)
-
 prob_scores = nb_model.predict_proba(X_test)[:, 1]
 ap_score = average_precision_score(y_test, prob_scores, pos_label='True')
 ```
 
 The AP score, as a summary of the PR curve, is `{python} f"{ap_score:.2f}"`. That fact that the AP score is very close to 1 suggests that our Naive Bayes model's performance is excellent.
 
+![ROC Curve for Naive Bayes classifier on test set](../img/roc_curve.png){#fig-roc-curve=75%}
+
 ```{python}
 #| echo: false
-#| label: fig-roc-curve
-#| fig-cap: ROC Curve for Naive Bayes classifier on test set
-
-RocCurveDisplay.from_estimator(
-    nb_model,
-    X_test,
-    y_test,
-    pos_label='Fake'
-)
-
 prob_scores = nb_model.predict_proba(X_test)[:, 1]
 auc_value = roc_auc_score(y_test, prob_scores)
 ```
