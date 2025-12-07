@@ -3,7 +3,7 @@ services:
     image: vindictive/fake-real-news-detection:787808f
     build: .
     container_name: fake-real-news-detection
-    platform: linux/amd64 # Set as linux/arm64 for MACOS M Chip
+    platform: linux/amd64 # Set linux/arm64 for MACOS M Chip
     ports:
       - "8000:8000"
     environment:
