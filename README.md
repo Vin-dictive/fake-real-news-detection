@@ -96,59 +96,85 @@ All dependencies are specified in `environment.yml` for conda or `conda-lock.yml
 
 ### Running the analysis
 
-1. Navigate to the root of this project on your computer using the
-   command line and enter the following command:
+#### Option 1: Using Makefile (Recommended)
+
+Run the complete analysis pipeline:
+
+```bash
+make all
+```
+
+Or run individual steps:
+
+```bash
+make download      # Download raw data
+make validate      # Validate processed data
+make split         # Split into train/test sets
+make preprocess    # Preprocess data
+make eda          # Run exploratory data analysis
+make model        # Train the model
+make evaluate     # Evaluate the model
+make report       # Generate final report
+make clean        # Remove generated files
+```
+
+#### Option 2: Using Docker with Makefile
+
+1. Start Docker container:
 
    ```bash
    docker compose up --build
    ```
 
-2. In the terminal, look for a URL that starts with
-`http://127.0.0.1:8888/lab?token=`
-Copy and paste that URL into your browser.
+2. In the terminal, look for a URL starting with `http://127.0.0.1:8888/lab?token=` and open it in your browser.
 
-3. To run the analysis,
-open a terminal and run the following commands:
+3. Run the analysis:
 
    ```bash
-   python scripts/00_download_data.py \
-      --url="https://raw.githubusercontent.com/Vin-dictive/fake-real-news-detection/refs/heads/main/data/raw/Fake.csv" \
-      --write_to=data/raw
-   
-   python scripts/00_download_data.py \
-      --url="https://raw.githubusercontent.com/Vin-dictive/fake-real-news-detection/refs/heads/main/data/raw/True.csv" \
-      --write_to=data/raw
-   
-   python scripts/01_clean_transform_data.py \
-      --raw_true_data=data/raw/True.csv \
-      --raw_fake_data=data/raw/Fake.csv
+   make all
+   ```
 
-   python scripts/02_data_validation_1.py \
-      --processed_data_path=data/processed/complete_data.csv
+#### Option 3: Running Scripts Manually
 
-   python scripts/03_data_splitting.py \
-      --data_path=data/processed/complete_data.csv
+```bash
+python scripts/00_download_data.py \
+   --url="https://raw.githubusercontent.com/Vin-dictive/fake-real-news-detection/refs/heads/main/data/raw/Fake.csv" \
+   --write_to=data/raw
 
-   python scripts/04_data_validation_2.py \
-      --train_data_path=data/processed/train_data.csv
+python scripts/00_download_data.py \
+   --url="https://raw.githubusercontent.com/Vin-dictive/fake-real-news-detection/refs/heads/main/data/raw/True.csv" \
+   --write_to=data/raw
 
-   python scripts/05_data_preprocessing.py \
-      --train_data_path=data/processed/train_data.csv \
-      --test_data_path=data/processed/test_data.csv
-   
-   python scripts/06_EDA.py \
-      --train_data_path=data/processed/train_data.csv
-   
-   python scripts/07_model_fitting.py \
-      --train_data_path=data/processed/train_data.csv \
-      --test_data_path=data/processed/test_data.csv
-   
-   python scripts/08_model_evaluation.py \
+python scripts/01_clean_transform_data.py \
+   --raw_true_data=data/raw/True.csv \
+   --raw_fake_data=data/raw/Fake.csv
+
+python scripts/02_data_validation_1.py \
+   --processed_data_path=data/processed/complete_data.csv
+
+python scripts/03_data_splitting.py \
+   --data_path=data/processed/complete_data.csv
+
+python scripts/04_data_validation_2.py \
+   --train_data_path=data/processed/train_data.csv
+
+python scripts/05_data_preprocessing.py \
+   --train_data_path=data/processed/train_data.csv \
+   --test_data_path=data/processed/test_data.csv
+
+python scripts/06_EDA.py \
+   --train_data_path=data/processed/train_data.csv
+
+python scripts/07_model_fitting.py \
+   --train_data_path=data/processed/train_data.csv \
+   --test_data_path=data/processed/test_data.csv
+
+python scripts/08_model_evaluation.py \
    --test_data_path=data/processed/test_data.csv \
    --model_path=models/naive_bayes.pkl
 
-   quarto render
-   ```
+quarto render
+```
 
 ### Clean up
 
@@ -240,7 +266,8 @@ fake-real-news-detection/
 ├── Dockerfile
 ├── environment.yml
 ├── LICENSE.md
-└── README.md
+├── Makefile
+├── README.md
 └── _quarto.yml
 ```
 

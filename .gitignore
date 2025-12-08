@@ -30,3 +30,6 @@ env/
 **/*.quarto_ipynb
 .cache
 .ipython
+
+# Ignore images from docs directory
+docs/img/*
