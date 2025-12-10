@@ -1,7 +1,7 @@
 import pandas as pd
 import os
 
-def load_data(path: str):
+def load_data(path: str) -> pd.DataFrame:
     """
     Load data from a CSV file into a pandas DataFrame.
 
@@ -22,6 +22,8 @@ def load_data(path: str):
         or the output dataframe has zero rows.
     FileNotFoundError
         If the file does not exist at the given path.
+    RuntimeError
+        If an unexpected error occurs while reading CSV file.
     """
     if not path.endswith(".csv"):
         raise ValueError("Data must be in CSV format")
@@ -34,7 +36,7 @@ def load_data(path: str):
     except pd.errors.EmptyDataError:
         raise ValueError("CSV file is empty")
     except Exception as e:
-        print(f"Unexpected error reading CSV: {e}")
+        RuntimeError(f"Unexpected error reading CSV: {e}")
     
     if data_df.empty:
         raise ValueError("CSV file contains no rows")
