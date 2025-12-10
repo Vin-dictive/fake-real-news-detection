@@ -6,12 +6,6 @@ This project implements a machine learning solution to classify news articles as
 
 ![Word Cloud Analysis](img/fake_text_word_cloud.png)
 
-![Word Cloud Analysis](img/fake_title_word_cloud.png)
-
-![Word Cloud Analysis](img/true_text_word_cloud.png)
-
-![Word Cloud Analysis](img/fake_title_word_cloud.png)
-
 ## Getting Started
 
 ### Clone the Repository
@@ -32,6 +26,7 @@ cd fake-real-news-detection
 This project requires the following main dependencies:
 
 - **Python 3.11**
+- **Docker** (for containerized environment)
 - **Data Science Libraries:**
   - pandas 2.3.3
   - numpy 2.3.5
@@ -57,7 +52,8 @@ All dependencies are specified in `environment.yml` for conda or `conda-lock.yml
 
 ### Environment Setup
 
-#### Option 1: If you have conda-lock installed, use conda-lock (Recommended)
+<details>
+<summary><strong>Option 1: Using conda-lock (Recommended)</strong></summary>
 
 1. Install from lock file for your platform:
 
@@ -66,7 +62,10 @@ All dependencies are specified in `environment.yml` for conda or `conda-lock.yml
    conda activate fake-news-detection
    ```
 
-#### Option 2: Using environment.yml
+</details>
+
+<details>
+<summary><strong>Option 2: Using environment.yml</strong></summary>
 
 1. Create conda environment:
 
@@ -75,7 +74,10 @@ All dependencies are specified in `environment.yml` for conda or `conda-lock.yml
    conda activate fake-news-detection
    ```
 
-#### Option 3: Using Docker
+</details>
+
+<details>
+<summary><strong>Option 3: Using Docker</strong></summary>
 
 1. Build and run with Docker Compose for running image from docker hub:
 
@@ -93,6 +95,8 @@ All dependencies are specified in `environment.yml` for conda or `conda-lock.yml
    ```
 
 3. Access Jupyter Lab at <http://127.0.0.1:8000/lab>
+
+</details>
 
 ### Running the analysis
 
