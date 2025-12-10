@@ -13,27 +13,14 @@ import pandas as pd
 import click
 import os
 import pandas as pd
+import sys
+sys.path.append(os.path.join(os.path.dirname(__file__), '..'))
+from src.load_data import load_data
 
 # terminal command to run script:
 # python scripts/05_data_preprocessing.py \
 #     --train_data_path=data/processed/train_data.csv \
 #     --test_data_path=data/processed/test_data.csv
-
-def load_data(path):
-    """
-    Load a dataset from a CSV file.
-
-    Parameters
-    ----------
-    path : str
-        Path to the CSV file containing the dataset.
-
-    Returns
-    -------
-    pd.DataFrame
-        DataFrame containing the loaded dataset.
-    """
-    return pd.read_csv(path)
 
 @click.command()
 @click.option('--train_data_path', type=str, required=True, help="Path to training data CSV")

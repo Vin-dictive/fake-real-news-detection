@@ -22,8 +22,6 @@ def filter_valid_rows(train_data: pd.DataFrame) -> pd.DataFrame:
         If input is not a pandas DataFrame.
     ValueError
         If required columns 'text' and 'date' are missing or if no valid rows remain.
-    RuntimeError
-        If an unexpected error occurs while filtering rows.
     """
     # Check if input is a Dataframe
     if not isinstance(train_data, pd.DataFrame):
@@ -41,7 +39,7 @@ def filter_valid_rows(train_data: pd.DataFrame) -> pd.DataFrame:
                                                format='mixed',
                                                errors='coerce').notna()]
     except Exception as e:
-        RuntimeError(f"Error filtering rows: {e}")
+        print(f"Error filtering rows: {e}")
         
     if train_data.empty:
         raise ValueError("No valid rows remaining")

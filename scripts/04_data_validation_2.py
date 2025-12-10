@@ -6,47 +6,15 @@ import click
 import os
 import pandas as pd
 import pandera.pandas as pa
+import sys
+sys.path.append(os.path.join(os.path.dirname(__file__), '..'))
+from src.load_data import load_data
+from src.filter_valid_rows import filter_valid_rows
 
 # terminal command to run script: 
 # python scripts/04_data_validation_2.py \
 #   --train_data_path=data/processed/train_data.csv
     
-def load_data(path):
-    """
-    Load a dataset from a CSV file.
-
-    Parameters
-    ----------
-    path : str
-        Path to the CSV file containing the dataset.
-
-    Returns
-    -------
-    pd.DataFrame
-        DataFrame containing the loaded dataset.
-    """
-    return pd.read_csv(path)
-
-def filter_valid_rows(train_data):
-    """
-    Filter out invalid rows from the training dataset.
-
-    Parameters
-    ----------
-    train_data : pd.DataFrame
-        The training dataset.
-
-    Returns
-    -------
-    pd.DataFrame
-        Filtered dataset containing only valid rows.
-    """
-    train_data = train_data[train_data['text'].str.len() >= 20]
-    train_data = train_data[pd.to_datetime(train_data['date'], 
-                                   format='mixed', 
-                                   errors='coerce').notna()]
-    return train_data
-
 def build_schema2():
     """
     Build a Pandera schema for validating training data content.
@@ -249,12 +217,11 @@ def main(train_data_path):
         validate_data(train_data, schema2)
         schema3 = build_schema3()
         validate_data(train_data, schema3)
-        
         print("Succesfully validated data")
     except FileNotFoundError:
         print(f"File not found: {train_data_path}")
     except pa.errors.SchemaErrors as err:
-        print("Data validation failed:")
+        print("Data validation failed")
         print(err.failure_cases)
     except Exception as e:
         print(f"Unexpected error: {e}")

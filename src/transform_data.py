@@ -25,10 +25,7 @@ def transform_data(true_df: pd.DataFrame, fake_df: pd.DataFrame) -> pd.DataFrame
         If the inputs are not pandas Dataframes,
     ValueError
         If 'subject' is not a column in the input Dataframes or if the
-        resulting Dataframe is empty
-    RuntimeError
-        If an unexpected error occurs during data transformation
-    
+        resulting Dataframe is empty    
     """
     # Check that inputs are Dataframes
     if not isinstance(true_df, pd.DataFrame):
@@ -61,7 +58,7 @@ def transform_data(true_df: pd.DataFrame, fake_df: pd.DataFrame) -> pd.DataFrame
         complete_df = pd.concat([true_df, fake_df])
         
     except Exception as e:
-        raise RuntimeError(f"Error during data transformation")
+        print(f"Error during data transformation: {e}")
     
     if complete_df.empty:
         raise ValueError("Combined dataset is empty after transformations")
