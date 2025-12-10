@@ -21,27 +21,14 @@ from sklearn.feature_extraction.text import CountVectorizer
 from sklearn.preprocessing import OneHotEncoder, FunctionTransformer
 from scipy.stats import expon, lognorm, loguniform, randint, uniform, norm, randint
 from sklearn.metrics import ConfusionMatrixDisplay, PrecisionRecallDisplay, RocCurveDisplay, classification_report
+import sys
+sys.path.append(os.path.join(os.path.dirname(__file__), '..'))
+from src.load_data import load_data
 
 # terminal command to run script:
 # python scripts/08_model_evaluation.py \
 #     --test_data_path=data/processed/test_data.csv \
 #     --model_path=models/naive_bayes.pkl
-
-def load_data(path):
-    """
-    Load a dataset from a CSV file.
-
-    Parameters
-    ----------
-    path : str
-        Path to the CSV file containing the dataset.
-
-    Returns
-    -------
-    pd.DataFrame
-        DataFrame containing the loaded dataset.
-    """
-    return pd.read_csv(path)
 
 def ravel_transform(x):
     """

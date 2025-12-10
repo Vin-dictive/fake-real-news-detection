@@ -6,26 +6,13 @@ import click
 import os
 import pandas as pd
 import pandera.pandas as pa
+import sys
+sys.path.append(os.path.join(os.path.dirname(__file__), '..'))
+from src.load_data import load_data
 
 # terminal command to run script: 
 # python scripts/02_data_validation_1.py \
     # --processed_data_path=data/processed/complete_data.csv
-    
-def load_data(path):
-    """
-    Load data from a CSV file into a pandas DataFrame.
-
-    Parameters
-    ----------
-    path : str
-        Path to the CSV file.
-
-    Returns
-    -------
-    pd.DataFrame
-        DataFrame containing the loaded data.
-    """
-    return pd.read_csv(path)
 
 def build_schema():
     """

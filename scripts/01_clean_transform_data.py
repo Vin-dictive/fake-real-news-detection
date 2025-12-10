@@ -5,68 +5,15 @@
 import click
 import os
 import pandas as pd
+import sys
+sys.path.append(os.path.join(os.path.dirname(__file__), '..'))
+from src.load_data import load_data
+from src.transform_data import transform_data
 
 # terminal command to run script: 
 # python scripts/01_clean_transform_data.py \
     # --raw_true_data=data/raw/True.csv \
     # --raw_fake_data=data/raw/Fake.csv
-
-def read_data(raw_data):
-    """
-    Load raw data from a CSV file into a pandas DataFrame.
-
-    Parameters
-    ----------
-    raw_data : str
-        Path to the raw CSV file.
-
-    Returns
-    -------
-    pd.DataFrame
-        DataFrame containing the loaded raw data.
-    """
-    # Load the raw data from the .csv files
-    data_df = pd.read_csv(raw_data)
-    return data_df
-
-def transform_data(true_df, fake_df):
-    """
-    Clean and transform the raw true and fake news DataFrames.
-
-    - Adds a 'target' column to distinguish True vs. Fake articles.
-    - Standardizes the 'subject' column into two categories: 'political' or 'non-political'.
-    - Concatenates the two DataFrames into one complete dataset.
-
-    Parameters
-    ----------
-    true_df : pd.DataFrame
-        DataFrame containing true news articles.
-    fake_df : pd.DataFrame
-        DataFrame containing fake news articles.
-
-    Returns
-    -------
-    pd.DataFrame
-        Combined and transformed DataFrame.
-    """    
-    # Create new 'target' columns true_df and fake_df
-    true_df['target'] = 'True'
-    fake_df['target'] = 'Fake'
-    
-    # Transform 'subject' columns so that they are consistenly in one of two categories: political or non-political
-    true_df['subject'] = true_df['subject'].replace('politicsNews', 'political')
-    true_df['subject'] = true_df['subject'].replace('worldnews', 'non-political')
-    fake_df['subject'] = fake_df['subject'].replace('politics', 'political')
-    fake_df['subject'] = fake_df['subject'].replace('left-news', 'political')
-    fake_df['subject'] = fake_df['subject'].replace('Government News', 'political')
-    fake_df['subject'] = fake_df['subject'].replace('News', 'non-political')
-    fake_df['subject'] = fake_df['subject'].replace('US_News', 'non-political')
-    fake_df['subject'] = fake_df['subject'].replace('Middle-east', 'non-political')
-    
-    # Combine true_df and fake_df into a complete dataset
-    complete_df = pd.concat([true_df, fake_df])
-    
-    return complete_df
 
 @click.command()
 @click.option('--raw_true_data', type=str, help="Path to raw true data")
@@ -87,9 +34,8 @@ def main(raw_true_data, raw_fake_data):
         Path to the raw fake news CSV file.
     """
     # Load the raw true and fake data from the .csv files
-    true_df = read_data(raw_true_data)
-    fake_df = read_data(raw_fake_data)
-    
+    true_df = load_data(raw_true_data)
+    fake_df = load_data(raw_fake_data)
     complete_df = transform_data(true_df, fake_df)
 
     try:
