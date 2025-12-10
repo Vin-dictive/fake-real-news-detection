@@ -1,6 +1,6 @@
 services:
   fake-real-news-detection:
-    image: vindictive/fake-real-news-detection:92dfcef
+    image: vindictive/fake-real-news-detection:b04014a
     build: .
     container_name: fake-real-news-detection
     platform: linux/amd64 # Set linux/arm64 for MACOS M Chip
