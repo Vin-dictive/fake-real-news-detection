@@ -100,7 +100,8 @@ All dependencies are specified in `environment.yml` for conda or `conda-lock.yml
 
 ### Running the analysis
 
-#### Option 1: Using Makefile (Recommended)
+<details>
+<summary><strong>Option 1: Using Makefile (Recommended)</strong></summary>
 
 Run the complete analysis pipeline:
 
@@ -122,7 +123,10 @@ make report       # Generate final report
 make clean        # Remove generated files
 ```
 
-#### Option 2: Using Docker with Makefile
+</details>
+
+<details>
+<summary><strong>Option 2: Using Docker with Makefile</strong></summary>
 
 1. Start Docker container:
 
@@ -138,7 +142,10 @@ make clean        # Remove generated files
    make all
    ```
 
-#### Option 3: Running Scripts Manually
+</details>
+
+<details>
+<summary><strong>Option 3: Running Scripts Manually</strong></summary>
 
 ```bash
 python scripts/00_download_data.py \
@@ -180,6 +187,8 @@ python scripts/08_model_evaluation.py \
 quarto render
 ```
 
+</details>
+
 ### Clean up
 
 1. To shut down the container and clean up the resources,
@@ -200,7 +209,7 @@ This project uses a news classification dataset containing:
 
 *Note: Please refer to the original dataset documentation for detailed information about data collection methodology and licensing terms.*
 
-## Repository Structure
+<!-- ## Repository Structure
 
 ```
 fake-real-news-detection/
@@ -208,60 +217,35 @@ fake-real-news-detection/
 │   └── workflows/
 │       └── docker-publish.yml    # GitHub Actions workflow
 ├── data/
-│   └── raw/
-│       ├── Fake.csv              # Fake news articles dataset
-│       └── True.csv              # Real news articles dataset
-│   └── text/
+│   ├── processed/                # Processed datasets
+│   ├── raw/                      # Raw datasets
+│   │   ├── Fake.csv              # Fake news articles dataset
+│   │   └── True.csv              # Real news articles dataset
+│   └── text/                     # Generated text outputs
 │       ├── classification_report.txt
 │       ├── target_value_counts.txt
-│       ├── train_df_info.txt
+│       └── train_df_info.txt
 ├── docs/
-│   └── img/
-│       ├── confusion_matrix.png
-│       ├── fake_real_count.png
-│       ├── fake_text_word_cloud.png
-│       ├── fake_title_word_cloud.png
-│       ├── pr_curve.png
-│       ├── roc_curve.png
-│       ├── subject_percentage_count.png
-│       ├── text_length_dist.png
-│       ├── title_length_dist.png
-│       ├── true_text_word_cloud.png
-│       ├── true_title_word_cloud.png
-│   └── reports/
-│       ├── fake_news_classification_analysis.html
-│       ├── fake_news_classification_analysis.pdf
-├── img/
-│   ├── confusion_matrix.png
-│   ├── fake_real_count.png
-│   ├── fake_text_word_cloud.png
-│   ├── fake_title_word_cloud.png
-│   ├── pr_curve.png
-│   ├── readme_1.png              
-│   ├── readme_2.png
-│   ├── readme_3.png              
-│   └── readme_4.png
-│   └── roc_curve.png
-│   └── subject_percentage_count.png
-│   └── text_length_dist.png
-│   └── title_length_dist.png
-│   └── true_text_word_cloud.png
-│   └── true_title_word_cloud.png
+│   ├── img/                      # Generated visualizations
+│   └── reports/                  # Generated reports
+├── img/                          # Static images for README
+├── models/                       # Trained models
+│   └── naive_bayes.pkl
 ├── notebooks/
-│   └── 001_fake_news_classification_analysis.ipynb  # Main analysis and modeling notebook
-├── reports/                      # Generated reports and outputs
-│   └── fake_news_classification_analysis.qmd
+│   └── 001_fake_news_classification_analysis.ipynb  # Main analysis notebook
+├── reports/                      # Report templates
+│   ├── fake_news_classification_analysis.qmd
 │   └── references.bib
-├── scripts/
-│   └── 00_download_data.py       # Data download script
-│   └── 01_clean_transform_data.py
-│   └── 02_data_validation_1.py
-│   └── 03_data_splitting.py
-│   └── 04_data_validation_2.py
-│   └── 05_data_preprocessing.py
-│   └── 06_EDA.py
-│   └── 07_model_fitting.py
-│   └── 08_model_evaluation.py
+├── scripts/                      # Analysis pipeline scripts
+│   ├── 00_download_data.py       # Data download
+│   ├── 01_clean_transform_data.py # Data cleaning
+│   ├── 02_data_validation_1.py   # Initial validation
+│   ├── 03_data_splitting.py      # Train/test split
+│   ├── 04_data_validation_2.py   # Training data validation
+│   ├── 05_data_preprocessing.py  # Text preprocessing
+│   ├── 06_EDA.py                 # Exploratory analysis
+│   ├── 07_model_fitting.py       # Model training
+│   └── 08_model_evaluation.py    # Model evaluation
 ├── .gitignore
 ├── CODE_OF_CONDUCT.md
 ├── conda-lock.yml
@@ -273,7 +257,7 @@ fake-real-news-detection/
 ├── Makefile
 ├── README.md
 └── _quarto.yml
-```
+``` -->
 
 ## Contributors
 
