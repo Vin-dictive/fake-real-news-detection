@@ -7,16 +7,7 @@ USER root
 RUN apt update && apt install -y \
     lmodern \
     texlive \
-    texlive-latex-base \
-    texlive-latex-extra \
-    texlive-fonts-recommended \
-    texlive-fonts-extra \
-    texlive-bibtex-extra \
-    texlive-science \
-    texlive-xetex \
-    texlive-luatex \
-    texlive-lang-european \
-    latexmk
+    texlive-luatex
 
 RUN fix-permissions "${CONDA_DIR}"
 RUN fix-permissions "/home/${NB_USER}"
