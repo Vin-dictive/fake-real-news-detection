@@ -39,6 +39,19 @@ def transform_data(true_df: pd.DataFrame, fake_df: pd.DataFrame) -> pd.DataFrame
     if "subject" not in set(fake_df.columns):
         raise ValueError("fake_df is missing the 'subject' column")
     
+    # Check the subject column has only specific values
+    true_allowed_subjects = {'politicsNews', 'worldnews'}
+    fake_allowed_subjects = {'politics', 'left-news', 'Government News',
+                             'News', 'US_News', 'Middle-east'}
+    # validate true_df subjects
+    true_invalid_subjects = set(true_df['subject']) - true_allowed_subjects
+    if true_invalid_subjects:
+        raise ValueError("true_df has unsupported subject values")
+    # validate fake_df subjects
+    fake_invalid_subjects = set(fake_df['subject']) - fake_allowed_subjects
+    if fake_invalid_subjects:
+        raise ValueError("fake_df has unsupported subject values")
+    
     try:
         # Create new 'target' columns true_df and fake_df
         true_df['target'] = 'True'
