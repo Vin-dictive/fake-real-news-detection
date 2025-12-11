@@ -27,6 +27,11 @@ edge_empty_string_output = pd.DataFrame({
     'letter': [np.nan]
 })
 
+# Test for correct output type
+def test_returns_dataframe():
+    output = load_data("../data/test/valid.csv")
+    assert isinstance(output, pd.DataFrame)
+
 # Test for reading in a valid csv file
 def test_valid_input():
     pd.testing.assert_frame_equal(load_data("../data/test/valid.csv").reset_index(drop=True),
