@@ -33,6 +33,9 @@ def transform_data(true_df: pd.DataFrame, fake_df: pd.DataFrame) -> pd.DataFrame
     if not isinstance(fake_df, pd.DataFrame):
         raise TypeError("fake_df must be a pandas Dataframe")
     
+    true_df = true_df.copy()
+    fake_df = fake_df.copy()
+    
     # Check that true_df and fake_df have the 'subject' column
     if "subject" not in set(true_df.columns):
         raise ValueError("true_df is missing the 'subject' column")
