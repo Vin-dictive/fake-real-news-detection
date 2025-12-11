@@ -62,4 +62,12 @@ def test_returns_dataframe():
     output = filter_valid_rows(nothing_to_remove)
     assert isinstance(output, pd.DataFrame)
 
-test_returns_dataframe()
+# Test for correctly filtering according to date and text column
+def test_correctly_filters():
+    pd.testing.assert_frame_equal(filter_valid_rows(nothing_to_remove).reset_index(drop=True),
+                                  nothing_to_remove_output.reset_index(drop=True))
+    pd.testing.assert_frame_equal(filter_valid_rows(remove_short_text).reset_index(drop=True),
+                                  remove_short_text_output.reset_index(drop=True))
+    pd.testing.assert_frame_equal(filter_valid_rows(remove_invalid_date).reset_index(drop=True),
+                                  remove_invalid_date_output.reset_index(drop=True))
+
