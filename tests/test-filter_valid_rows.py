@@ -71,3 +71,20 @@ def test_correctly_filters():
     pd.testing.assert_frame_equal(filter_valid_rows(remove_invalid_date).reset_index(drop=True),
                                   remove_invalid_date_output.reset_index(drop=True))
 
+# Test for correct error handling
+def test_error_handling():
+    # input dataframe missing text column
+    with pytest.raises(ValueError):
+        filter_valid_rows(missing_text_column)
+
+    # input dataframe missing date column
+    with pytest.raises(ValueError):
+        filter_valid_rows(missing_date_column)
+    
+    # input is not a dataframe
+    with pytest.raises(TypeError):
+        filter_valid_rows(input_not_dataframe)
+
+    # output dataframe has no rows remaining
+    with pytest.raises(ValueError):
+        filter_valid_rows(no_rows_remaining)
