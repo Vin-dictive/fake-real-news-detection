@@ -1,11 +1,11 @@
-.PHONY: all clean download validate split preprocess eda model evaluate report help
+.PHONY: all clean download validate split preprocess eda model evaluate report test help
 
 # URLs for data download
 FAKE_URL = "https://raw.githubusercontent.com/Vin-dictive/fake-real-news-detection/refs/heads/main/data/raw/Fake.csv"
 TRUE_URL = "https://raw.githubusercontent.com/Vin-dictive/fake-real-news-detection/refs/heads/main/data/raw/True.csv"
 
 # Default target
-all: download validate split validate-train preprocess eda model evaluate report
+all: download validate split validate-train preprocess eda model evaluate test report
 
 # Download raw data
 data/raw/Fake.csv:
@@ -52,6 +52,10 @@ model: models/naive_bayes.pkl
 evaluate: models/naive_bayes.pkl data/processed/test_data.csv
 	python scripts/08_model_evaluation.py --test_data_path=data/processed/test_data.csv --model_path=models/naive_bayes.pkl
 
+# Run tests
+test:
+	pytest tests/ -v
+
 # Render report
 report: evaluate
 	quarto render
@@ -78,5 +82,6 @@ help:
 	@echo "  model        - Train the model"
 	@echo "  evaluate     - Evaluate the model"
 	@echo "  report       - Generate final report"
+	@echo "  test         - Run pytest tests"
 	@echo "  clean        - Remove generated files"
 	@echo "  help         - Show this help message"
