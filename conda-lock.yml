@@ -13,10 +13,10 @@
 version: 1
 metadata:
   content_hash:
-    osx-64: 72c3d9b6fe0efff22ff45e774838f818f7794cfcd94bb926b8cc92a4df27870c
-    linux-64: dc180b9af4bcda2bc69b33fdfadb4681846ac249db8f8b71e28dde8b29aa54c9
-    win-64: 60d37d31bbc4758fd72365ce8d57f46fd4484e44f520ab05d17c3a90acd308f7
-    osx-arm64: 1e6c92e6371d078e019beaee6ea1e4985a9169a92a62b3d2df197fc33c2a75d0
+    osx-64: 81236ba89d34077b99c22c3441dc945bf64f736185cbc8045f2a18aa9fcb9a12
+    linux-64: 142fcb8c917a324c23d1097c074da4a7c1c67907807d985eb90e999afe2610f4
+    win-64: e4ab34f6811b4286303693c70afba93953acbeb8a1e8d223785b5adaa586a93e
+    osx-arm64: 4805202e08ff0761b28062c2f73223686cfa8663f463d0b89361fae5f999d4f8
   channels:
   - url: conda-forge
     used_env_vars: []
@@ -3975,6 +3975,54 @@ package:
     sha256: acc1d991837c0afb67c75b77fdc72b4bf022aac71fedd8b9ea45918ac9b08a80
   category: main
   optional: false
+- name: iniconfig
+  version: 2.3.0
+  manager: conda
+  platform: linux-64
+  dependencies:
+    python: '>=3.10'
+  url: https://conda.anaconda.org/conda-forge/noarch/iniconfig-2.3.0-pyhd8ed1ab_0.conda
+  hash:
+    md5: 9614359868482abba1bd15ce465e3c42
+    sha256: e1a9e3b1c8fe62dc3932a616c284b5d8cbe3124bbfbedcf4ce5c828cb166ee19
+  category: main
+  optional: false
+- name: iniconfig
+  version: 2.3.0
+  manager: conda
+  platform: osx-64
+  dependencies:
+    python: '>=3.10'
+  url: https://conda.anaconda.org/conda-forge/noarch/iniconfig-2.3.0-pyhd8ed1ab_0.conda
+  hash:
+    md5: 9614359868482abba1bd15ce465e3c42
+    sha256: e1a9e3b1c8fe62dc3932a616c284b5d8cbe3124bbfbedcf4ce5c828cb166ee19
+  category: main
+  optional: false
+- name: iniconfig
+  version: 2.3.0
+  manager: conda
+  platform: osx-arm64
+  dependencies:
+    python: '>=3.10'
+  url: https://conda.anaconda.org/conda-forge/noarch/iniconfig-2.3.0-pyhd8ed1ab_0.conda
+  hash:
+    md5: 9614359868482abba1bd15ce465e3c42
+    sha256: e1a9e3b1c8fe62dc3932a616c284b5d8cbe3124bbfbedcf4ce5c828cb166ee19
+  category: main
+  optional: false
+- name: iniconfig
+  version: 2.3.0
+  manager: conda
+  platform: win-64
+  dependencies:
+    python: '>=3.10'
+  url: https://conda.anaconda.org/conda-forge/noarch/iniconfig-2.3.0-pyhd8ed1ab_0.conda
+  hash:
+    md5: 9614359868482abba1bd15ce465e3c42
+    sha256: e1a9e3b1c8fe62dc3932a616c284b5d8cbe3124bbfbedcf4ce5c828cb166ee19
+  category: main
+  optional: false
 - name: ipykernel
   version: 7.1.0
   manager: conda
@@ -5090,75 +5138,71 @@ package:
   category: main
   optional: false
 - name: jupyter_client
-  version: 8.6.3
+  version: 8.7.0
   manager: conda
   platform: linux-64
   dependencies:
-    importlib-metadata: '>=4.8.3'
-    jupyter_core: '>=4.12,!=5.0.*'
-    python: '>=3.9'
+    jupyter_core: '>=5.1'
+    python: ''
     python-dateutil: '>=2.8.2'
-    pyzmq: '>=23.0'
-    tornado: '>=6.2'
+    pyzmq: '>=25.0'
+    tornado: '>=6.4.1'
     traitlets: '>=5.3'
-  url: https://conda.anaconda.org/conda-forge/noarch/jupyter_client-8.6.3-pyhd8ed1ab_1.conda
+  url: https://conda.anaconda.org/conda-forge/noarch/jupyter_client-8.7.0-pyhcf101f3_0.conda
   hash:
-    md5: 4ebae00eae9705b0c3d6d1018a81d047
-    sha256: 19d8bd5bb2fde910ec59e081eeb59529491995ce0d653a5209366611023a0b3a
+    md5: 1b0397a7b1fbffa031feb690b5fd0277
+    sha256: 6aa61417547b925de64905b7a4da7c98e0b355f48a7b21bdbef438f8950ee74e
   category: main
   optional: false
 - name: jupyter_client
-  version: 8.6.3
+  version: 8.7.0
   manager: conda
   platform: osx-64
   dependencies:
-    importlib-metadata: '>=4.8.3'
-    jupyter_core: '>=4.12,!=5.0.*'
-    python: '>=3.9'
+    jupyter_core: '>=5.1'
+    python: '>=3.10'
     python-dateutil: '>=2.8.2'
-    pyzmq: '>=23.0'
-    tornado: '>=6.2'
+    pyzmq: '>=25.0'
+    tornado: '>=6.4.1'
     traitlets: '>=5.3'
-  url: https://conda.anaconda.org/conda-forge/noarch/jupyter_client-8.6.3-pyhd8ed1ab_1.conda
+  url: https://conda.anaconda.org/conda-forge/noarch/jupyter_client-8.7.0-pyhcf101f3_0.conda
   hash:
-    md5: 4ebae00eae9705b0c3d6d1018a81d047
-    sha256: 19d8bd5bb2fde910ec59e081eeb59529491995ce0d653a5209366611023a0b3a
+    md5: 1b0397a7b1fbffa031feb690b5fd0277
+    sha256: 6aa61417547b925de64905b7a4da7c98e0b355f48a7b21bdbef438f8950ee74e
   category: main
   optional: false
 - name: jupyter_client
-  version: 8.6.3
+  version: 8.7.0
   manager: conda
   platform: osx-arm64
   dependencies:
-    importlib-metadata: '>=4.8.3'
-    jupyter_core: '>=4.12,!=5.0.*'
-    python: '>=3.9'
+    jupyter_core: '>=5.1'
+    python: '>=3.10'
     python-dateutil: '>=2.8.2'
-    pyzmq: '>=23.0'
-    tornado: '>=6.2'
+    pyzmq: '>=25.0'
+    tornado: '>=6.4.1'
     traitlets: '>=5.3'
-  url: https://conda.anaconda.org/conda-forge/noarch/jupyter_client-8.6.3-pyhd8ed1ab_1.conda
+  url: https://conda.anaconda.org/conda-forge/noarch/jupyter_client-8.7.0-pyhcf101f3_0.conda
   hash:
-    md5: 4ebae00eae9705b0c3d6d1018a81d047
-    sha256: 19d8bd5bb2fde910ec59e081eeb59529491995ce0d653a5209366611023a0b3a
+    md5: 1b0397a7b1fbffa031feb690b5fd0277
+    sha256: 6aa61417547b925de64905b7a4da7c98e0b355f48a7b21bdbef438f8950ee74e
   category: main
   optional: false
 - name: jupyter_client
-  version: 8.6.3
+  version: 8.7.0
   manager: conda
   platform: win-64
   dependencies:
-    importlib-metadata: '>=4.8.3'
-    jupyter_core: '>=4.12,!=5.0.*'
-    python: '>=3.9'
+    jupyter_core: '>=5.1'
+    python: '>=3.10'
     python-dateutil: '>=2.8.2'
-    pyzmq: '>=23.0'
-    tornado: '>=6.2'
+    pyzmq: '>=25.0'
+    tornado: '>=6.4.1'
     traitlets: '>=5.3'
-  url: https://conda.anaconda.org/conda-forge/noarch/jupyter_client-8.6.3-pyhd8ed1ab_1.conda
+  url: https://conda.anaconda.org/conda-forge/noarch/jupyter_client-8.7.0-pyhcf101f3_0.conda
   hash:
-    md5: 4ebae00eae9705b0c3d6d1018a81d047
-    sha256: 19d8bd5bb2fde910ec59e081eeb59529491995ce0d653a5209366611023a0b3a
+    md5: 1b0397a7b1fbffa031feb690b5fd0277
+    sha256: 6aa61417547b925de64905b7a4da7c98e0b355f48a7b21bdbef438f8950ee74e
   category: main
   optional: false
 - name: jupyter_console
@@ -10133,6 +10177,54 @@ package:
     sha256: 04c64fb78c520e5c396b6e07bc9082735a5cc28175dbe23138201d0a9441800b
   category: main
   optional: false
+- name: pluggy
+  version: 1.6.0
+  manager: conda
+  platform: linux-64
+  dependencies:
+    python: ''
+  url: https://conda.anaconda.org/conda-forge/noarch/pluggy-1.6.0-pyhf9edf01_1.conda
+  hash:
+    md5: d7585b6550ad04c8c5e21097ada2888e
+    sha256: e14aafa63efa0528ca99ba568eaf506eb55a0371d12e6250aaaa61718d2eb62e
+  category: main
+  optional: false
+- name: pluggy
+  version: 1.6.0
+  manager: conda
+  platform: osx-64
+  dependencies:
+    python: '>=3.9'
+  url: https://conda.anaconda.org/conda-forge/noarch/pluggy-1.6.0-pyhf9edf01_1.conda
+  hash:
+    md5: d7585b6550ad04c8c5e21097ada2888e
+    sha256: e14aafa63efa0528ca99ba568eaf506eb55a0371d12e6250aaaa61718d2eb62e
+  category: main
+  optional: false
+- name: pluggy
+  version: 1.6.0
+  manager: conda
+  platform: osx-arm64
+  dependencies:
+    python: '>=3.9'
+  url: https://conda.anaconda.org/conda-forge/noarch/pluggy-1.6.0-pyhf9edf01_1.conda
+  hash:
+    md5: d7585b6550ad04c8c5e21097ada2888e
+    sha256: e14aafa63efa0528ca99ba568eaf506eb55a0371d12e6250aaaa61718d2eb62e
+  category: main
+  optional: false
+- name: pluggy
+  version: 1.6.0
+  manager: conda
+  platform: win-64
+  dependencies:
+    python: '>=3.9'
+  url: https://conda.anaconda.org/conda-forge/noarch/pluggy-1.6.0-pyhf9edf01_1.conda
+  hash:
+    md5: d7585b6550ad04c8c5e21097ada2888e
+    sha256: e14aafa63efa0528ca99ba568eaf506eb55a0371d12e6250aaaa61718d2eb62e
+  category: main
+  optional: false
 - name: prometheus_client
   version: 0.23.1
   manager: conda
@@ -10964,6 +11056,82 @@ package:
   hash:
     md5: e2fd202833c4a981ce8a65974fe4abd1
     sha256: d016e04b0e12063fbee4a2d5fbb9b39a8d191b5a0042f0b8459188aedeabb0ca
+  category: main
+  optional: false
+- name: pytest
+  version: 9.0.2
+  manager: conda
+  platform: linux-64
+  dependencies:
+    colorama: '>=0.4'
+    exceptiongroup: '>=1'
+    iniconfig: '>=1.0.1'
+    packaging: '>=22'
+    pluggy: '>=1.5,<2'
+    pygments: '>=2.7.2'
+    python: ''
+    tomli: '>=1'
+  url: https://conda.anaconda.org/conda-forge/noarch/pytest-9.0.2-pyhcf101f3_0.conda
+  hash:
+    md5: 2b694bad8a50dc2f712f5368de866480
+    sha256: 9e749fb465a8bedf0184d8b8996992a38de351f7c64e967031944978de03a520
+  category: main
+  optional: false
+- name: pytest
+  version: 9.0.2
+  manager: conda
+  platform: osx-64
+  dependencies:
+    colorama: '>=0.4'
+    exceptiongroup: '>=1'
+    iniconfig: '>=1.0.1'
+    packaging: '>=22'
+    pluggy: '>=1.5,<2'
+    pygments: '>=2.7.2'
+    python: '>=3.10'
+    tomli: '>=1'
+  url: https://conda.anaconda.org/conda-forge/noarch/pytest-9.0.2-pyhcf101f3_0.conda
+  hash:
+    md5: 2b694bad8a50dc2f712f5368de866480
+    sha256: 9e749fb465a8bedf0184d8b8996992a38de351f7c64e967031944978de03a520
+  category: main
+  optional: false
+- name: pytest
+  version: 9.0.2
+  manager: conda
+  platform: osx-arm64
+  dependencies:
+    colorama: '>=0.4'
+    exceptiongroup: '>=1'
+    iniconfig: '>=1.0.1'
+    packaging: '>=22'
+    pluggy: '>=1.5,<2'
+    pygments: '>=2.7.2'
+    python: '>=3.10'
+    tomli: '>=1'
+  url: https://conda.anaconda.org/conda-forge/noarch/pytest-9.0.2-pyhcf101f3_0.conda
+  hash:
+    md5: 2b694bad8a50dc2f712f5368de866480
+    sha256: 9e749fb465a8bedf0184d8b8996992a38de351f7c64e967031944978de03a520
+  category: main
+  optional: false
+- name: pytest
+  version: 9.0.2
+  manager: conda
+  platform: win-64
+  dependencies:
+    colorama: '>=0.4'
+    exceptiongroup: '>=1'
+    iniconfig: '>=1.0.1'
+    packaging: '>=22'
+    pluggy: '>=1.5,<2'
+    pygments: '>=2.7.2'
+    python: '>=3.10'
+    tomli: '>=1'
+  url: https://conda.anaconda.org/conda-forge/noarch/pytest-9.0.2-pyhcf101f3_0.conda
+  hash:
+    md5: 2b694bad8a50dc2f712f5368de866480
+    sha256: 9e749fb465a8bedf0184d8b8996992a38de351f7c64e967031944978de03a520
   category: main
   optional: false
 - name: python
@@ -13346,7 +13514,7 @@ package:
   category: main
   optional: false
 - name: tornado
-  version: 6.5.2
+  version: 6.5.3
   manager: conda
   platform: linux-64
   dependencies:
@@ -13354,42 +13522,42 @@ package:
     libgcc: '>=14'
     python: '>=3.11,<3.12.0a0'
     python_abi: 3.11.*
-  url: https://conda.anaconda.org/conda-forge/linux-64/tornado-6.5.2-py311h49ec1c0_2.conda
+  url: https://conda.anaconda.org/conda-forge/linux-64/tornado-6.5.3-py311h49ec1c0_0.conda
   hash:
-    md5: 8d7a63fc9653ed0bdc253a51d9a5c371
-    sha256: 1913516458f92df2a0b415426dce27cc14922415787f4b672a707b233631b1e0
+    md5: a0d8cab7384ccfca582b952d9c8c619a
+    sha256: 0d5c53a3ae7531ddf6bc28fb95edded05f1908f3ccffe5ab820f5992b81e5418
   category: main
   optional: false
 - name: tornado
-  version: 6.5.2
+  version: 6.5.3
   manager: conda
   platform: osx-64
   dependencies:
     __osx: '>=10.13'
     python: '>=3.11,<3.12.0a0'
     python_abi: 3.11.*
-  url: https://conda.anaconda.org/conda-forge/osx-64/tornado-6.5.2-py311hf197a57_2.conda
+  url: https://conda.anaconda.org/conda-forge/osx-64/tornado-6.5.3-py311hf197a57_0.conda
   hash:
-    md5: 04c6997f161e260378aa174f3faeb0dc
-    sha256: 88e4ca9e96d042313c62e8037574262622171c99a0ff3afd9747fbeb84963186
+    md5: 45cfb83dd6fda1523868be421ea631d0
+    sha256: de643b1f09444ca93c6048c36cbf2eafef2e7c59e6979ff33efaa0486a3cfb4d
   category: main
   optional: false
 - name: tornado
-  version: 6.5.2
+  version: 6.5.3
   manager: conda
   platform: osx-arm64
   dependencies:
     __osx: '>=11.0'
     python: '>=3.11,<3.12.0a0'
     python_abi: 3.11.*
-  url: https://conda.anaconda.org/conda-forge/osx-arm64/tornado-6.5.2-py311h9408147_2.conda
+  url: https://conda.anaconda.org/conda-forge/osx-arm64/tornado-6.5.3-py311h9408147_0.conda
   hash:
-    md5: e3af56f478d9919acac254ff82ad150c
-    sha256: 70d4187bb8ec0016b9928e76eeaea0b2a021f741ea40a6ea2ee4b9c142ddaf24
+    md5: 003b0ea34f01257e6b4f68ad208fb692
+    sha256: 8234acb3e895b7d9c720818c8d1d2771d5f7f1619807cc949e7ffffb8c13a29d
   category: main
   optional: false
 - name: tornado
-  version: 6.5.2
+  version: 6.5.3
   manager: conda
   platform: win-64
   dependencies:
@@ -13398,10 +13566,10 @@ package:
     ucrt: '>=10.0.20348.0'
     vc: '>=14.3,<15'
     vc14_runtime: '>=14.44.35208'
-  url: https://conda.anaconda.org/conda-forge/win-64/tornado-6.5.2-py311h3485c13_2.conda
+  url: https://conda.anaconda.org/conda-forge/win-64/tornado-6.5.3-py311h3485c13_0.conda
   hash:
-    md5: 56b468f7a48593bc555c35e4a610d1f2
-    sha256: 3e8b659fae3429474e61193b8810961c1ddc815b8cd6331cdc8e4dcd4dd172a3
+    md5: 86a3825fa4ec091f57e3431529e9b9d2
+    sha256: b23411237e6f9f4a9f66dec196cea8f7ff6c3d89aeff795244fb4217f5db0356
   category: main
   optional: false
 - name: traitlets

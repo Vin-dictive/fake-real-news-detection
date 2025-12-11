@@ -19,5 +19,6 @@ dependencies:
   - conda-lock
   - make=4.4.1
   - pip=25.3
+  - pytest=9.0.2
   - pip:
     - quarto-cli
