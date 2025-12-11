@@ -37,8 +37,8 @@ true_no_subject_column = pd.DataFrame({
 fake_no_subject_column = pd.DataFrame({
     "ID": [3, 4, 5, 6, 7, 8],
     "news_type": ['politics', 'left-news',
-                'Government News', 'News',
-                'US_News', 'Middle-east']
+                  'Government News', 'News',
+                  'US_News', 'Middle-east']
 })
 
 true_empty = pd.DataFrame({
@@ -68,6 +68,19 @@ normal_replace_output = pd.DataFrame({
                 'political', 'non-political', 'non-political', 'non-political'],
     'target': ['True', 'True', 'Fake', 'Fake',
                'Fake', 'Fake', 'Fake', 'Fake']
+})
+
+edge_empty_true_output = pd.DataFrame({
+    "ID": [3, 4, 5, 6, 7, 8],
+    "subject": ['political', 'political', 'political', 
+                'non-political', 'non-political', 'non-political'],
+    "target": ['Fake', 'Fake', 'Fake', 'Fake', 'Fake', 'Fake']
+})
+
+edge_empty_fake_output = pd.DataFrame({
+    "ID": [1, 2],
+    "subject": ['political', 'non-political'],
+    "target": ['True', 'True']
 })
 
 # Test for correct output type
@@ -110,9 +123,15 @@ def test_error_handling():
     with pytest.raises(ValueError):
         transform_data(true_normal_replace, fake_unsupported_subject)
 
-test_error_handling()
-
 # Test for edge cases
 def test_edge_cases():
-    pass
-        
+    # edge case 1: empty true_df, non-empty fake_df
+    pd.testing.assert_frame_equal(transform_data(true_empty, fake_normal_replace).reset_index(drop=True),
+                                  edge_empty_true_output.reset_index(drop=True),
+                                  check_dtype=False)
+    
+    # edge case 2: empty fake_df, non-empty true_df
+    pd.testing.assert_frame_equal(transform_data(true_normal_replace, fake_empty).reset_index(drop=True),
+                                  edge_empty_fake_output.reset_index(drop=True),
+                                  check_dtype=False)
+       
