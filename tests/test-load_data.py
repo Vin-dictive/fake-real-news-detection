@@ -1,3 +1,4 @@
+import numpy as np
 import pandas as pd
 import pytest
 import sys
@@ -10,15 +11,21 @@ from src.load_data import load_data
 # Set current working directory as the working directory where this test file is located
 os.chdir(os.path.dirname(os.path.abspath(__file__)))
 
-# Test data
-
-
 # Expected outputs
 valid_output = pd.DataFrame({
     'num': [1, 2],
     'letter': ['a', 'b']
 })
 
+edge_one_row_output = pd.DataFrame({
+    'num': [1],
+    'letter': ['a']
+})
+
+edge_empty_string_output = pd.DataFrame({
+    'num': [0],
+    'letter': [np.nan]
+})
 
 # Test for reading in a valid csv file
 def test_valid_input():
@@ -43,8 +50,12 @@ def test_error_handling():
     with pytest.raises(ValueError):
         load_data("../data/test/output_zero_rows.csv")
 
-test_error_handling()
-
 # Test for edge cases
-
-        
+def test_edge_cases():
+    # edge case 1: csv file only has one row
+    pd.testing.assert_frame_equal(load_data("../data/test/one_row.csv").reset_index(drop=True),
+                                  edge_one_row_output.reset_index(drop=True))
+    
+    # edge case 2: csv file has only empty string as value
+    pd.testing.assert_frame_equal(load_data("../data/test/empty_string.csv").reset_index(drop=True),
+                                  edge_empty_string_output.reset_index(drop=True))
