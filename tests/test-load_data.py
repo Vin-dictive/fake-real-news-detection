@@ -24,15 +24,26 @@ valid_output = pd.DataFrame({
 def test_valid_input():
     pd.testing.assert_frame_equal(load_data("../data/test/valid.csv").reset_index(drop=True),
                                   valid_output.reset_index(drop=True))
-    
-test_valid_input()
-
-
-# Test for correctly filtering according to date and text column
-
 
 # Test for correct error handling
+def test_error_handling():
+    # test file name not ending with ".csv"
+    with pytest.raises(ValueError):
+        load_data("../data/test/valid.txt")
+    
+    # test file not found
+    with pytest.raises(FileNotFoundError):
+        load_data("data/test/valid.csv")
+    
+    # test csv file is empty
+    with pytest.raises(ValueError):
+        load_data("../data/test/empty_csv.csv")
+    
+    # test csv file containing no rows
+    with pytest.raises(ValueError):
+        load_data("../data/test/output_zero_rows.csv")
 
+test_error_handling()
 
 # Test for edge cases
 
