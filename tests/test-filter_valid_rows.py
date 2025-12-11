@@ -41,6 +41,16 @@ no_rows_remaining = pd.DataFrame({
     'date': ['2021-15-40', 'excuse-me']
 })
 
+edge_input_one_row = pd.DataFrame({
+    "text": ['x' * 30],
+    'date': ['2021-01-01']
+})
+
+edge_empty_input = pd.DataFrame({
+    "text": pd.Series([], dtype="string"),
+    'date': pd.Series([], dtype="string")
+})
+
 # Expected outputs
 nothing_to_remove_output = pd.DataFrame({
     "text": ['x' * 30, 'y' * 40],
@@ -57,13 +67,18 @@ remove_invalid_date_output = pd.DataFrame({
     'date': ['2021-01-01']
 })
 
+edge_input_one_row_output = pd.DataFrame({
+    "text": ['x' * 30],
+    'date': ['2021-01-01']
+})
+
 # Test for correctly returning a dataframe as output
 def test_returns_dataframe():
     output = filter_valid_rows(nothing_to_remove)
     assert isinstance(output, pd.DataFrame)
 
 # Test for correctly filtering according to date and text column
-def test_correctly_filters():
+def test_correctly_filtering():
     pd.testing.assert_frame_equal(filter_valid_rows(nothing_to_remove).reset_index(drop=True),
                                   nothing_to_remove_output.reset_index(drop=True))
     pd.testing.assert_frame_equal(filter_valid_rows(remove_short_text).reset_index(drop=True),
@@ -88,3 +103,14 @@ def test_error_handling():
     # output dataframe has no rows remaining
     with pytest.raises(ValueError):
         filter_valid_rows(no_rows_remaining)
+
+# Test for edge cases
+def test_edge_cases():
+    # edge case 1: input dataframe just with one row
+    pd.testing.assert_frame_equal(filter_valid_rows(edge_input_one_row).reset_index(drop=True),
+                                  edge_input_one_row_output.reset_index(drop=True))
+    
+    # edge case 2: input dataframe has zero row
+    with pytest.raises(ValueError):
+        filter_valid_rows(edge_empty_input)
+        
