@@ -53,31 +53,7 @@ All dependencies are specified in `environment.yml` for conda or `conda-lock.yml
 ### Environment Setup
 
 <details>
-<summary><strong>Option 1: Using conda-lock (Recommended)</strong></summary>
-
-1. Install from lock file for your platform:
-
-   ```bash
-   conda-lock install --name fake-news-detection conda-lock.yml
-   conda activate fake-news-detection
-   ```
-
-</details>
-
-<details>
-<summary><strong>Option 2: Using environment.yml</strong></summary>
-
-1. Create conda environment:
-
-   ```bash
-   conda env create -f environment.yml
-   conda activate fake-news-detection
-   ```
-
-</details>
-
-<details>
-<summary><strong>Option 3: Using Docker</strong></summary>
+<summary><strong>Option 1: Using Docker (Recommended)</strong></summary>
 
 1. Build and run with Docker Compose for running image from docker hub:
 
@@ -95,6 +71,30 @@ All dependencies are specified in `environment.yml` for conda or `conda-lock.yml
    ```
 
 3. Access Jupyter Lab at <http://127.0.0.1:8000/lab>
+
+</details>
+
+<details>
+<summary><strong>Option 2: Using conda-lock</strong></summary>
+
+1. Install from lock file for your platform:
+
+   ```bash
+   conda-lock install --name fake-news-detection conda-lock.yml
+   conda activate fake-news-detection
+   ```
+
+</details>
+
+<details>
+<summary><strong>Option 3: Using environment.yml</strong></summary>
+
+1. Create conda environment:
+
+   ```bash
+   conda env create -f environment.yml
+   conda activate fake-news-detection
+   ```
 
 </details>
 
@@ -120,6 +120,7 @@ make eda          # Run exploratory data analysis
 make model        # Train the model
 make evaluate     # Evaluate the model
 make report       # Generate final report
+make test         # To run tests
 make clean        # Remove generated files
 ```
 
