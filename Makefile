@@ -5,7 +5,7 @@ FAKE_URL = "https://raw.githubusercontent.com/Vin-dictive/fake-real-news-detecti
 TRUE_URL = "https://raw.githubusercontent.com/Vin-dictive/fake-real-news-detection/refs/heads/main/data/raw/True.csv"
 
 # Default target
-all: download validate split validate-train preprocess eda model evaluate test report
+all: download test validate split validate-train preprocess eda model evaluate report
 
 # Download raw data
 data/raw/Fake.csv:
