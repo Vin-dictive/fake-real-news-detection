@@ -1,5 +1,5 @@
 ---
-title: "Detecting fake news: binary classification of fake vs. true news based on textual characteristics of news articles"
+title: "Detecting Fake News: Binary Classification of Fake vs. True News based on Textual Characteristics of News Articles"
 author: "Sarah Gauthier, Jessie Liang and Vinay Valson"
 date: "2025-11-19"
 format: 
