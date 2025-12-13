@@ -46,3 +46,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Changed
 
 - Capitalized the report title in the Jupyter notebook and Quarto documents
+
+## Peer review feedback
+
+**Commit:** [dcebd95](https://github.com/Vin-dictive/fake-real-news-detection/commit/dcebd950184cc4696a2e1d9f2daaae10a6e26dad)  
+**Issue:** [#41](https://github.com/Vin-dictive/fake-real-news-detection/issues/41)
+
+### Changed
+
+- Added a guidance in README.md about how to run function tests in bash terminal
