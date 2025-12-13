@@ -54,7 +54,7 @@ evaluate: models/naive_bayes.pkl data/processed/test_data.csv
 
 # Run tests
 test:
-	pytest tests/ -v
+	python -m pytest tests/ -v
 
 # Render report
 report: evaluate

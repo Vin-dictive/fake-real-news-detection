@@ -192,11 +192,11 @@ quarto render
 
 ### Running the function tests
 
-Function tests are written in python scripts. To run these tests to see whether they pass, 
+Function tests are written in python scripts. To run these tests to see whether they pass,
 please run the following command in the root project directory using bash terminal:
 
 ```bash
-pytest tests/
+python -m pytest tests/ -v
 ```
 
 ### Clean up
