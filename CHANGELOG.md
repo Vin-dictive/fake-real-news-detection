@@ -34,6 +34,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 **Commit:** [92dfcef](https://github.com/Vin-dictive/fake-real-news-detection/commit/92dfcefcb48e3ca6a0e0bdd0f9fb2d1295ac4c87)  
 **Issue:** [#41](https://github.com/Vin-dictive/fake-real-news-detection/issues/41)
 
+### Changed
+
+- Added dependencies version numbers in the env yaml file
 
 ## Peer review feedback
 
