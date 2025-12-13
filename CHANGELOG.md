@@ -34,6 +34,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 **Commit:** [92dfcef](https://github.com/Vin-dictive/fake-real-news-detection/commit/92dfcefcb48e3ca6a0e0bdd0f9fb2d1295ac4c87)  
 **Issue:** [#41](https://github.com/Vin-dictive/fake-real-news-detection/issues/41)
 
+
+## Peer review feedback
+
+**Commit:** [583cd98](https://github.com/Vin-dictive/fake-real-news-detection/commit/583cd98109be1617231c104de7df202054c88f1b)  
+**Issue:** [#41](https://github.com/Vin-dictive/fake-real-news-detection/issues/41)
+
 ### Changed
 
-- Added dependencies version numbers in the env yaml file
+- Capitalized the report title in the Jupyter notebook and Quarto documents
