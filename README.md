@@ -196,7 +196,7 @@ Function tests are written in python scripts. To run these tests to see whether 
 please run the following command in the root project directory using bash terminal:
 
 ```bash
-   pytest tests/
+pytest tests/
 ```
 
 ### Clean up
