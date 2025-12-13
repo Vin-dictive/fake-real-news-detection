@@ -190,6 +190,15 @@ quarto render
 
 </details>
 
+### Running the function tests
+
+Function tests are written in python scripts. To run these tests to see whether they pass, 
+please run the following command in the root project directory using bash terminal:
+
+```bash
+   pytest tests/
+```
+
 ### Clean up
 
 1. To shut down the container and clean up the resources,
