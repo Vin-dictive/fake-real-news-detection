@@ -7,11 +7,6 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
-### Changed
-
-- Updated Makefile to run tests after data download in pipeline
-- Renamed test files to follow pytest naming conventions (underscores instead of hyphens)
-
 ## Peer review feedback
 
 **Commit:** [562d91b](https://github.com/Vin-dictive/fake-real-news-detection/commit/562d91bdac9e3089409aaf527b4f7e555b6b7b4d)  
